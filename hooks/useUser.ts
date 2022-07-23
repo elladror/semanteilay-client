@@ -26,23 +26,19 @@ const useUser = () => {
     signIn({ id, name });
   };
 
-  const changeTeam = async (teamId: string, roomId: string) => {
-    if (user.teamId) {
-      changeUserTeam(user.id, teamId, roomId);
-      socket.emit("leaveTeam", user.teamId);
-    }
-
-    socket.emit("joinTeam", teamId);
+  const changeTeam = async (teamId: string, roomId: string ,oldTeamId?: string) => {
+    changeUserTeam({userId: user.id, teamId, oldTeamId});
+    socket.emit("switchTeam", {newTeamId: teamId, oldTeamId: user.teamId, roomId});
     setUser({ ...user, teamId });
   };
 
   const leaveTeam = () => {
-    setUser({ name: user.name, id: user.id});
+    setUser({ name: user.name, id: user.id });
   };
 
   useEffect(() => {
     socket.on("disconnect", signOut);
-    
+
     return () => {
       socket.removeListener("disconnect", signOut); // TODO: reconsider ux when refresh kicks you out
     };

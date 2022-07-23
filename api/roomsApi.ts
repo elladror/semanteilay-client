@@ -14,5 +14,3 @@ export const GET_ALL_ROOMS_URL = `${SERVER_URL + BASE_URL}`
 export const getRoomById = async (id: string) => await get(`/${id}`)
 
 export const GET_ROOM_BY_ID_URL = `${SERVER_URL + BASE_URL}/`
-
-export const leaveRoom = async (roomId: string, userId: string) => await leave({roomId, userId}, "/room")

@@ -1,10 +1,11 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import useSWR from "swr";
 import { fetcher } from "../api/api";
 import { createTeam as createNewTeam, GET_TEAM_BY_ID_URL as url } from "../api/teamsApi";
 import { Room } from "../models";
 import useUser from "./useUser";
 
+// TODO: find use / delete updateRoom
 const useTeam = (room: Room, updateRoom: () => void) => {
   const { user, changeTeam, leaveTeam } = useUser();
   const [name, setName] = useState(user.teamId ? "" : `${user.name}'s team`);
@@ -12,12 +13,12 @@ const useTeam = (room: Room, updateRoom: () => void) => {
     revalidateIfStale: false,
     revalidateOnFocus: false,
     revalidateOnReconnect: false,
-  }); //TODO does null return error?
+  });
 
   (async () => {
     if (!user.teamId && room) {
-      const id = await createNewTeam({ name, user, room });
-      changeTeam(id as string, room.id);
+      const teamId = await createNewTeam({ name, user, room });
+      changeTeam(teamId, room?.id);
     }
   })();
 
@@ -25,14 +26,13 @@ const useTeam = (room: Room, updateRoom: () => void) => {
     if (team) setName(team.name)
   }, [team, setName])
 
-  const switchTeam = useCallback((teamId: string) => {
-    changeTeam(teamId, room?.id);
-    updateRoom();
-  }, [changeTeam, room, updateRoom]);
+  const switchTeam = useCallback((newTeamId: string) => {
+    if (user.teamId !== newTeamId) {
+      changeTeam(newTeamId, room?.id, user.teamId);
+    }
+  }, [changeTeam, room?.id, user.teamId]);
 
-  const changeName = useCallback((newName: string) => null, []);
-
-  return { name, switchTeam, changeTeamName: changeName, leaveTeam };
+  return { name, switchTeam, leaveTeam };
 };
 
 export default useTeam;

@@ -6,23 +6,20 @@ import { SocketContext } from "../context/socket";
 import { useContext, useEffect } from "react";
 
 export const useRooms = () => {
-    const { data, error, mutate } = useSWR(url, fetcher);
-    const socket = useContext(SocketContext);
+  const { data, error, mutate } = useSWR(url, fetcher);
+  const socket = useContext(SocketContext);
 
-    useEffect(() => {
-        socket.on('roomsUpdated', mutate)
-        
-        return () => {
-            socket.removeAllListeners();
-        }
-    }, [mutate, socket])
+  useEffect(() => {
+    socket.on("roomsUpdated", mutate);
 
-
-
-    return {
-      rooms: data as Room[],
-      isLoading: !error && !data,
-      isError: error as Error,
+    return () => {
+      socket.removeListener("roomsUpdated", mutate);
     };
+  }, [mutate, socket]);
+
+  return {
+    rooms: data as Room[],
+    isLoading: !error && !data,
+    isError: error as Error,
   };
-  
+};
