@@ -17,7 +17,7 @@ const CreateRoom: FC<Props> = ({ user }) => {
     setRoomToCreate(`${user.name}'s room`);
   }, [setRoomToCreate, user]);
 
-  const createNewRoom = async (roomName: string) => { 
+  const createNewRoom = async (roomName: string) => {
     try {
       const { id, name } = await createRoom(roomName);
       router.push({ pathname: "/room", query: { id } }, `/room/${name.replaceAll(" ", "-")}`); // TODO: add "as" but have ability to refresh

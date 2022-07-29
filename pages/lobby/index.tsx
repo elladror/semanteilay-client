@@ -18,7 +18,7 @@ const Lobby: NextPage = () => {
   return (
     <main>
       <Title>Lobby</Title>
-      <CreateRoom user={user}/>
+      <CreateRoom user={user} />
       <Rooms />
     </main>
   );

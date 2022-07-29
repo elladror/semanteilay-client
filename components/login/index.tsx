@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 import { useInput } from "../../hooks/useInput";
 import { useLocalStorage } from "usehooks-ts";
 import Title from "../title";
-import useUser from "../../hooks/useUser"
+import useUser from "../../hooks/useUser";
 import { AxiosError } from "axios";
 
 const Login: FC = () => {
@@ -26,11 +26,11 @@ const Login: FC = () => {
     event.preventDefault();
 
     try {
-      await signUp({name});
+      await signUp({ name });
       setLastNickname(name);
       router.push("/lobby");
     } catch (error) {
-      if((error as AxiosError).response?.status === 409 ) setWarning(true);
+      if ((error as AxiosError).response?.status === 409) setWarning(true);
     }
   };
 
@@ -43,10 +43,12 @@ const Login: FC = () => {
           <b>Play</b>
         </Button>
       </form>
-      {warning && <Alert severity="warning">
-        <AlertTitle>Nickname taken</AlertTitle>
-        Try a different name nerd
-      </Alert>}
+      {warning && (
+        <Alert severity="warning">
+          <AlertTitle>Nickname taken</AlertTitle>
+          Try a different name nerd
+        </Alert>
+      )}
     </main>
   );
 };

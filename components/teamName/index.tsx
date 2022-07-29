@@ -14,7 +14,9 @@ const TeamName: FC<Props> = ({ initialName, onChange }) => {
     setName(initialName);
   }, [initialName, setName]);
 
-  useEffect(() => {onChange(name)}, [name, onChange])
+  useEffect(() => {
+    onChange(name);
+  }, [name, onChange]);
 
   return <TextField variant="standard" {...bindInput} label="team name" sx={{ margin: 1 }} />;
 };

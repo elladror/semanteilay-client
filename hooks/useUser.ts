@@ -26,9 +26,9 @@ const useUser = () => {
     signIn({ id, name });
   };
 
-  const changeTeam = async (teamId: string, roomId: string ,oldTeamId?: string) => {
-    changeUserTeam({userId: user.id, teamId, oldTeamId});
-    socket.emit("switchTeam", {newTeamId: teamId, oldTeamId: user.teamId, roomId});
+  const changeTeam = async (teamId: string, roomId: string, oldTeamId?: string) => {
+    changeUserTeam({ userId: user.id, teamId, oldTeamId });
+    socket.emit("switchTeam", { newTeamId: teamId, oldTeamId: user.teamId, roomId });
     setUser({ ...user, teamId });
   };
 

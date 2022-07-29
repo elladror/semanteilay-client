@@ -6,8 +6,10 @@ interface RankProps {
 }
 
 const Rank: FC<RankProps> = ({ rank }) => {
-  return ( rank < 0 ? <></> :
-    <LinearProgress color="success" sx={{height: 20}} variant="determinate" value={rank / 10} />
+  return rank < 0 ? (
+    <></>
+  ) : (
+    <LinearProgress color="success" sx={{ height: 20 }} variant="determinate" value={rank / 10} />
   );
 };
 

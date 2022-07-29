@@ -23,14 +23,17 @@ const useTeam = (room: Room, updateRoom: () => void) => {
   })();
 
   useEffect(() => {
-    if (team) setName(team.name)
-  }, [team, setName])
+    if (team) setName(team.name);
+  }, [team, setName]);
 
-  const switchTeam = useCallback((newTeamId: string) => {
-    if (user.teamId !== newTeamId) {
-      changeTeam(newTeamId, room?.id, user.teamId);
-    }
-  }, [changeTeam, room?.id, user.teamId]);
+  const switchTeam = useCallback(
+    (newTeamId: string) => {
+      if (user.teamId !== newTeamId) {
+        changeTeam(newTeamId, room?.id, user.teamId);
+      }
+    },
+    [changeTeam, room?.id, user.teamId]
+  );
 
   return { name, switchTeam, leaveTeam };
 };

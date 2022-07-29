@@ -39,7 +39,7 @@ export const useRoom = (id: string) => {
   }, [mutate, socket]);
 
   function leaveRoom() {
-    router.push('/lobby');
+    router.push("/lobby");
   }
 
   return {
