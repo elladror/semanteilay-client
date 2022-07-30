@@ -14,7 +14,9 @@ const Guess: FC<Props> = ({ guess }) => {
         <TableCell align="center" sx={{ width: 150 }}>
           <Rank rank={guess.rank} />
         </TableCell>
-        <TableCell align="center">{guess.rank > 0 ? `${guess.rank} / 1000` : `(קר)`}</TableCell>
+        <TableCell align="center">
+          {guess.rank > 0 ? `${guess.rank} / 1000` : `(קר)`}
+        </TableCell>
         <TableCell align="center">{guess.word}</TableCell>
         <TableCell align="center">{guess.score}</TableCell>
         <TableCell align="center" sx={{ width: 20 }}>

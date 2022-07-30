@@ -1,4 +1,7 @@
-import { addGuess as postGuess, GET_ALL_TEAM_GUESSES_URL as url } from "../api/guessApi";
+import {
+  addGuess as postGuess,
+  GET_ALL_TEAM_GUESSES_URL as url,
+} from "../api/guessApi";
 import { fetcher } from "../api/api";
 import useSWR from "swr";
 import { Guess } from "../models";
@@ -7,7 +10,10 @@ import { useContext, useEffect, useReducer } from "react";
 import useUser from "./useUser";
 import { SocketContext } from "../context/socket";
 
-function reducer(state: Guess[], action: { payload: Guess[]; type: "add" | "update" }) {
+function reducer(
+  state: Guess[],
+  action: { payload: Guess[]; type: "add" | "update" }
+) {
   switch (action.type) {
     case "add":
       return [
@@ -65,7 +71,7 @@ export const useGuesses = () => {
     } else {
       const newGuess = await postGuess(guess);
       dispatch({ payload: [newGuess], type: "add" });
-      socket.emit("newGuess", guess);
+      socket.emit("newGuess", newGuess);
     }
   };
 

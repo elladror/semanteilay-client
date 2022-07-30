@@ -9,7 +9,7 @@ import { Room } from "../models";
 import useUser from "./useUser";
 
 // TODO: find use / delete updateRoom
-const useTeam = (room: Room, updateRoom: () => void) => {
+const useTeam = (room: Room) => {
   const { user, changeTeam, leaveTeam } = useUser();
   const [name, setName] = useState(user.teamId ? "" : `${user.name}'s team`);
   const { data: team, error } = useSWR(

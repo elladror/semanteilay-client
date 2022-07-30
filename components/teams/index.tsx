@@ -1,16 +1,24 @@
 import { FC } from "react";
-import { Team } from "../../models";
+import useTeam from "../../hooks/useTeam";
+import { Room } from "../../models";
 import TeamComponent from "../teamComponent";
 
 interface Props {
-  teams: Team[];
+  room: Room;
 }
 
-const Teams: FC<Props> = ({ teams }) => {
+const Teams: FC<Props> = ({ room }) => {
+  const { switchTeam, name } = useTeam(room);
+
   return (
     <>
-      {teams.map((team) => (
-        <TeamComponent key={team.id} team={team}></TeamComponent>
+      {room.teams.map((team) => (
+        <TeamComponent
+          key={team.id}
+          team={team}
+          onClick={() => switchTeam(team.id)}
+          isCurrentTeam={name === team.name}
+        ></TeamComponent>
       ))}
     </>
   );
