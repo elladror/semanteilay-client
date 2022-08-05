@@ -3,13 +3,7 @@ import MakeGuess from "../makeGuess";
 import { useGuesses } from "../../hooks/useGuesses";
 import useUser from "../../hooks/useUser";
 import Guess from "../guess";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableRow,
-} from "@mui/material";
+import { Table, TableBody, TableCell, TableHead, TableRow } from "@mui/material";
 
 const Guesses: FC = () => {
   const { guesses, addGuess, isLoading, isError, guess } = useGuesses();

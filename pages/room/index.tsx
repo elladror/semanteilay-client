@@ -10,9 +10,7 @@ import Teams from "../../components/teams";
 
 const Room: FC = () => {
   const router = useRouter();
-  const { room, isLoading, isError, leaveRoom } = useRoom(
-    (router.query.id as string) ?? "-"
-  );
+  const { room, isLoading, isError, leaveRoom } = useRoom((router.query.id as string) ?? "-");
 
   if (isLoading || isError)
     return (
@@ -24,19 +22,12 @@ const Room: FC = () => {
 
   return (
     <>
-      <IconButton
-        color="secondary"
-        onClick={leaveRoom}
-        sx={{ alignSelf: "flex-start" }}
-      >
+      <IconButton color="secondary" onClick={leaveRoom} sx={{ alignSelf: "flex-start" }}>
         <ArrowBackIcon />
       </IconButton>
       <Typography variant="h3">
         <span key={room.participantCount} className="flip-animate">
-          {room.name} With{" "}
-          <span data-hover={room.participantCount}>
-            {room.participantCount}
-          </span>{" "}
+          {room.name} With <span data-hover={room.participantCount}>{room.participantCount}</span>{" "}
           Players
         </span>
       </Typography>

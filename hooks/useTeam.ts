@@ -1,10 +1,7 @@
 import { useCallback, useContext, useEffect, useState } from "react";
 import useSWR from "swr";
 import { fetcher } from "../api/api";
-import {
-  createTeam as createNewTeam,
-  GET_TEAM_BY_ID_URL as url,
-} from "../api/teamsApi";
+import { createTeam as createNewTeam, GET_TEAM_BY_ID_URL as url } from "../api/teamsApi";
 import { Room } from "../models";
 import useUser from "./useUser";
 
@@ -12,15 +9,11 @@ import useUser from "./useUser";
 const useTeam = (room: Room) => {
   const { user, changeTeam, leaveTeam } = useUser();
   const [name, setName] = useState(user.teamId ? "" : `${user.name}'s team`);
-  const { data: team, error } = useSWR(
-    user.teamId ? [url, user.teamId] : null,
-    fetcher,
-    {
-      revalidateIfStale: false,
-      revalidateOnFocus: false,
-      revalidateOnReconnect: false,
-    }
-  );
+  const { data: team, error } = useSWR(user.teamId ? [url, user.teamId] : null, fetcher, {
+    revalidateIfStale: false,
+    revalidateOnFocus: false,
+    revalidateOnReconnect: false,
+  });
 
   (async () => {
     if (!user.teamId && room) {
