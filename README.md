@@ -1,6 +1,6 @@
 # Semantle
 
-noder
+noder neder
 
 ## Getting started
 
