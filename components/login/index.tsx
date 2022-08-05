@@ -11,6 +11,7 @@ const Login: FC = () => {
   const [lastNickname, setLastNickname] = useLocalStorage("last-nickname", "");
   const { value: name, setValue: setName, bind: bindInput } = useInput("");
   const [warning, setWarning] = useState(false);
+  const [error, setError] = useState<AxiosError | null>(null);
   const router = useRouter();
   const { signUp } = useUser();
 
@@ -30,7 +31,11 @@ const Login: FC = () => {
       setLastNickname(name);
       router.push("/lobby");
     } catch (error) {
-      if ((error as AxiosError).response?.status === 409) setWarning(true);
+      if ((error as AxiosError).response?.status === 409) {
+        setWarning(true);
+      } else {
+        setError(error as AxiosError);
+      }
     }
   };
 
@@ -47,6 +52,12 @@ const Login: FC = () => {
         <Alert severity="warning">
           <AlertTitle>Nickname taken</AlertTitle>
           Try a different name nerd
+        </Alert>
+      )}
+      {error && (
+        <Alert severity="error">
+          <AlertTitle>Error occured</AlertTitle>
+          {error.message}
         </Alert>
       )}
     </main>
