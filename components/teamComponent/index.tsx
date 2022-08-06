@@ -14,10 +14,12 @@ interface Props {
 
 const TeamComponent: FC<Props> = ({ team, onClick, isCurrentTeam = false }) => {
   return (
-    <Card>
+    <Card sx={{ width: "11rem" }}>
       <CardContent>
-        <Typography variant="h6">{team.name}</Typography>
-        <Typography variant="body1">top guess:</Typography>
+        <Typography fontWeight="500" variant="body1">
+          {team.name}
+        </Typography>
+        <Typography variant="body2">top guess:</Typography>
       </CardContent>
       <CardActions>
         {!isCurrentTeam ? (

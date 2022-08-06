@@ -7,6 +7,7 @@ import IconButton from "@mui/material/IconButton";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import Typography from "@mui/material/Typography";
 import Teams from "../../components/teams";
+import Box from "@mui/material/Box";
 
 const Room: FC = () => {
   const router = useRouter();
@@ -32,15 +33,9 @@ const Room: FC = () => {
         </span>
       </Typography>
       <hr />
-      <Teams room={room} />
-      {/* {room.teams.map((team) => {
-        return (
-          <Typography variant="h5" key={team.id} onClick={() => switchTeam(team.id)}>
-            {team.name}
-          </Typography>
-        );
-      })} */}
       <Guesses />
+      <Box sx={{ my: 4 }}></Box>
+      <Teams room={room} />
     </>
   );
 };
