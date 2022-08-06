@@ -1,5 +1,5 @@
 import axios from "axios";
-export const SERVER_URL = process.env.NEXT_PUBLIC_SERVER_URL;
+export const SERVER_URL = process.env.NEXT_PUBLIC_SERVER_URL ?? "http://localhost:9000";
 
 export const getApi =
   (baseUrl: string) =>

@@ -1,8 +1,7 @@
 import { addGuess as postGuess, GET_ALL_TEAM_GUESSES_URL as url } from "../api/guessApi";
 import { fetcher } from "../api/api";
 import useSWR from "swr";
-import { Guess } from "../models";
-import { guess } from "../api/semantleApi";
+import { Guess, GuessCreationInput, User } from "../models";
 import { useContext, useEffect, useReducer } from "react";
 import useUser from "./useUser";
 import { SocketContext } from "../context/socket";
@@ -47,10 +46,10 @@ export const useGuesses = () => {
     };
   }, [socket]);
 
-  const doesGuessExist = (guess: Omit<Guess, "serialNumber">) =>
-    guesses.some((current) => current.word === guess.word);
+  const doesGuessExist = ({ word }: { word: string }) =>
+    guesses.some((current) => current.word === word);
 
-  const addGuess = async (guess: Omit<Guess, "serialNumber">) => {
+  const addGuess = async (guess: GuessCreationInput) => {
     if (doesGuessExist(guess)) {
       const existingGuess = guesses.find(
         (currentGuess) => guess.word === currentGuess.word
@@ -74,6 +73,5 @@ export const useGuesses = () => {
     isLoading: !error && !guesses,
     isError: !!error,
     addGuess,
-    guess,
   };
 };

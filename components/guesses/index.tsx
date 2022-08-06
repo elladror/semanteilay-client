@@ -6,7 +6,7 @@ import Guess from "../guess";
 import { Table, TableBody, TableCell, TableHead, TableRow } from "@mui/material";
 
 const Guesses: FC = () => {
-  const { guesses, addGuess, isLoading, isError, guess } = useGuesses();
+  const { guesses, addGuess, isLoading, isError } = useGuesses();
   const { user } = useUser();
 
   if (isError || isLoading) return <h1>hi</h1>;
@@ -16,13 +16,10 @@ const Guesses: FC = () => {
       <MakeGuess
         handleGuess={async (word: string) => {
           try {
-            const { similarity: score, distance: rank } = await guess(word);
             addGuess({
               word,
-              score,
-              rank,
-              owner: user.id,
-              team: user.teamId as string,
+              ownerId: user.id,
+              teamId: user.teamId as string,
             });
           } catch (err) {
             console.log("Don't know that word"); // TODO: implement don't know the word

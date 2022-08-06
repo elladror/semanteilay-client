@@ -25,3 +25,9 @@ export type Guess = {
   team: string;
   serialNumber: number;
 };
+
+export type GuessCreationInput = {
+  word: string;
+  ownerId: string;
+  teamId: string;
+};
