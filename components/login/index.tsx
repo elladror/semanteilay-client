@@ -10,7 +10,7 @@ import { AxiosError } from "axios";
 const Login: FC = () => {
   const [lastNickname, setLastNickname] = useLocalStorage("last-nickname", "");
   const { value: name, setValue: setName, bind: bindInput } = useInput("");
-  const [warning, setWarning] = useState(false);
+  const [warning, setWarning] = useState("");
   const [error, setError] = useState<AxiosError | null>(null);
   const router = useRouter();
   const { signUp } = useUser();
@@ -26,13 +26,19 @@ const Login: FC = () => {
   const handleSubmit: FormEventHandler<HTMLFormElement> = async (event) => {
     event.preventDefault();
 
+    if (name.length > 10) {
+      setWarning("Name longer than 10 characters");
+
+      return;
+    }
+
     try {
       await signUp({ name });
       setLastNickname(name);
       router.push("/lobby");
     } catch (error) {
       if ((error as AxiosError).response?.status === 409) {
-        setWarning(true);
+        setWarning("Name Taken");
       } else {
         setError(error as AxiosError);
       }
@@ -50,8 +56,8 @@ const Login: FC = () => {
       </form>
       {warning && (
         <Alert severity="warning">
-          <AlertTitle>Nickname taken</AlertTitle>
-          Try a different name nerd
+          <AlertTitle>Try a different name</AlertTitle>
+          {warning}
         </Alert>
       )}
       {error && (
