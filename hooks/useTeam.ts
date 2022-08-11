@@ -14,11 +14,10 @@ const useTeam = (room: Room) => {
     revalidateOnFocus: false,
     revalidateOnReconnect: false,
   });
-
   (async () => {
     if (!user.teamId && room) {
       const teamId = await createNewTeam({ name, user, room });
-      changeTeam(teamId, room?.id);
+      changeTeam(teamId);
     }
   })();
 
@@ -29,10 +28,10 @@ const useTeam = (room: Room) => {
   const switchTeam = useCallback(
     (newTeamId: string) => {
       if (user.teamId !== newTeamId) {
-        changeTeam(newTeamId, room?.id, user.teamId);
+        changeTeam(newTeamId, user.teamId);
       }
     },
-    [changeTeam, room?.id, user.teamId]
+    [changeTeam, user.teamId]
   );
 
   return { name, switchTeam, leaveTeam };

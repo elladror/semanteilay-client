@@ -3,7 +3,7 @@ import { fetcher } from "../api/api";
 import { GET_ROOM_BY_ID_URL as url } from "../api/roomsApi";
 import { Room } from "../models";
 import { SocketContext } from "../context/socket";
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useCallback } from "react";
 import { useRouter } from "next/router";
 
 export const useRoom = (id: string) => {
@@ -12,12 +12,17 @@ export const useRoom = (id: string) => {
     error,
     mutate,
   } = useSWR([url, id], fetcher, {
-    revalidateOnFocus: true,
+    revalidateIfStale: true,
+    revalidateOnFocus: false,
     revalidateOnReconnect: false,
   });
   const socket = useContext(SocketContext);
   const isLoading = !room && !error;
   const router = useRouter();
+
+  const refetch = useCallback(() => {
+    mutate();
+  }, [mutate]);
 
   useEffect(() => {
     if (room) {
@@ -31,12 +36,20 @@ export const useRoom = (id: string) => {
   }, [isLoading, socket]); // happens once after the data
 
   useEffect(() => {
-    socket.on("participantUpdate", mutate);
+    socket.on("participantUpdate", refetch);
 
     return () => {
-      socket.removeListener("participantUpdate", mutate);
+      socket.removeListener("participantUpdate", refetch);
     };
-  }, [mutate, socket]);
+  }, [refetch, socket]);
+
+  useEffect(() => {
+    socket.on("teamDeleted", refetch);
+
+    return () => {
+      socket.removeListener("teamDeleted", refetch);
+    };
+  }, [refetch, socket]);
 
   function leaveRoom() {
     router.push("/lobby");
