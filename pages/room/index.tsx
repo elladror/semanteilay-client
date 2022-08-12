@@ -1,7 +1,6 @@
 import { useRouter } from "next/router";
 import { FC } from "react";
 import { useRoom } from "../../hooks/useRoom";
-import Skeleton from "react-loading-skeleton";
 import Guesses from "../../components/guesses";
 import IconButton from "@mui/material/IconButton";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
@@ -13,12 +12,7 @@ const Room: FC = () => {
   const router = useRouter();
   const { room, isLoading, isError, leaveRoom } = useRoom((router.query.id as string) ?? "-");
 
-  if (isLoading || isError)
-    return (
-      <h1>
-        <Skeleton />
-      </h1>
-    );
+  if (isLoading || isError) return <h1></h1>;
   // TODO: add proper handling
 
   return (

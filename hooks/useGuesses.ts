@@ -37,7 +37,6 @@ export const useGuesses = () => {
   useEffect(() => {
     const addGuess = (guess: Guess) => {
       dispatch({ payload: [guess], type: "add" });
-      console.log(guess);
     };
     socket.on("newGuess", addGuess);
 

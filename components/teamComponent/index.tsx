@@ -10,9 +10,10 @@ interface Props {
   team: Team;
   onClick: () => void;
   isCurrentTeam: boolean;
+  disabled: boolean;
 }
 
-const TeamComponent: FC<Props> = ({ team, onClick, isCurrentTeam = false }) => {
+const TeamComponent: FC<Props> = ({ team, onClick, isCurrentTeam = false, disabled }) => {
   return (
     <Card sx={{ width: "11rem" }}>
       <CardContent>
@@ -23,7 +24,7 @@ const TeamComponent: FC<Props> = ({ team, onClick, isCurrentTeam = false }) => {
       </CardContent>
       <CardActions>
         {!isCurrentTeam ? (
-          <Button size="small" onClick={onClick}>
+          <Button disabled={disabled} size="small" onClick={onClick}>
             Join
           </Button>
         ) : (

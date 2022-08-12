@@ -3,6 +3,7 @@ import styles from "./rooms.module.css";
 import Typography from "@mui/material/Typography";
 import { Room, User } from "../../models";
 import { useRooms } from "../../hooks/useRooms";
+import { Skeleton } from "@mui/material";
 
 interface RoomsProps {
   user: User;
@@ -21,13 +22,15 @@ const Rooms: FC<RoomsProps> = ({ rooms, changeTeam, user }) => {
 
   return (
     <div className={styles.grid}>
-      {rooms.map(({ id: roomId, name }) => {
-        return (
-          <div key={roomId} className={styles.card} onClick={enterRoom(roomId)}>
-            <Typography variant="h2">{name}</Typography>
-          </div>
-        );
-      })}
+      {!rooms
+        ? [1, 2, 3, 4].map((key) => <Skeleton key={key} className={styles.card} />)
+        : rooms.map(({ id: roomId, name }) => {
+            return (
+              <div key={roomId} className={styles.card} onClick={enterRoom(roomId)}>
+                <Typography variant="h2">{name}</Typography>
+              </div>
+            );
+          })}
     </div>
   );
 };
