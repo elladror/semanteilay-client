@@ -1,7 +1,7 @@
 import { addGuess as postGuess, GET_ALL_TEAM_GUESSES_URL as url } from "../api/guessApi";
 import { fetcher } from "../api/api";
 import useSWR from "swr";
-import { Guess, GuessCreationInput, User } from "../models";
+import { Guess, GuessCreationInput } from "../models";
 import { useContext, useEffect, useReducer } from "react";
 import useUser from "./useUser";
 import { SocketContext } from "../context/socket";
