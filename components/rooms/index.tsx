@@ -1,39 +1,29 @@
-import { FC, MouseEvent } from "react";
+import { FC, MouseEventHandler } from "react";
 import styles from "./rooms.module.css";
-import { useRouter } from "next/router";
-import { useRooms } from "../../hooks/useRooms";
-import Skeleton from "react-loading-skeleton";
 import Typography from "@mui/material/Typography";
+import { Room, User } from "../../models";
+import { useRooms } from "../../hooks/useRooms";
 
-const Rooms: FC = () => {
-  const router = useRouter();
-  const { rooms, isError, isLoading } = useRooms();
+interface RoomsProps {
+  user: User;
+  rooms: Room[];
+  changeTeam: (teamId: string) => void;
+}
 
-  // TODO: add isEror isLoading and skeleton
-  if (isError || isLoading)
-    return (
-      <h1>
-        <Skeleton circle />
-      </h1>
-    );
+const Rooms: FC<RoomsProps> = ({ rooms, changeTeam, user }) => {
+  const { joinRoom } = useRooms({ changeTeam, user });
 
   const enterRoom =
-    ({ id, name }: { id: string; name: string }) =>
-    (event: MouseEvent<HTMLDivElement>) => {
-      router.push(
-        {
-          pathname: "/room",
-          query: { id },
-        }
-        // `/room/${name.replaceAll(" ", "-")}`
-      );
+    (roomId: string): MouseEventHandler<HTMLDivElement> =>
+    (_event) => {
+      joinRoom(roomId);
     };
 
   return (
     <div className={styles.grid}>
-      {rooms.map(({ id, name }) => {
+      {rooms.map(({ id: roomId, name }) => {
         return (
-          <div key={id} className={styles.card} onClick={enterRoom({ id, name })}>
+          <div key={roomId} className={styles.card} onClick={enterRoom(roomId)}>
             <Typography variant="h2">{name}</Typography>
           </div>
         );

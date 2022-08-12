@@ -1,29 +1,30 @@
 import { Button, TextField } from "@mui/material";
-import { useRouter } from "next/router";
 import { FC, FormEventHandler, useContext, useEffect } from "react";
 import { createRoom } from "../../api/roomsApi";
 import { SocketContext } from "../../context/socket";
 import { useInput } from "../../hooks/useInput";
+import { useRooms } from "../../hooks/useRooms";
 import { User } from "../../models";
 
 interface Props {
   user: User;
+  changeTeam: (teamId: string) => void;
 }
 
-const CreateRoom: FC<Props> = ({ user }) => {
+const CreateRoom: FC<Props> = ({ user, changeTeam }) => {
   const { value: roomToAdd, setValue: setRoomToCreate, bind } = useInput("");
-  const router = useRouter();
   const socket = useContext(SocketContext);
+  const { joinRoom } = useRooms({ changeTeam, user });
 
   useEffect(() => {
     setRoomToCreate(`${user.name}'s room`);
-  }, [setRoomToCreate, user]);
+  }, [setRoomToCreate, user.name]);
 
   const createNewRoom = async (roomName: string) => {
     try {
       const { id } = await createRoom(roomName);
       socket.emit("create-room");
-      router.push({ pathname: "/room", query: { id } }); // TODO: add "as" but have ability to refresh (with rewrites)
+      joinRoom(id);
     } catch (error) {
       console.error("failed to create new room"); // TODO: add normal indication
     }

@@ -1,25 +1,27 @@
-import useSWR from "swr";
-import { Room } from "../models";
-import { GET_ALL_ROOMS_URL as url } from "../api/roomsApi";
-import { fetcher } from "../api/api";
-import { SocketContext } from "../context/socket";
-import { useContext, useEffect } from "react";
+import { User } from "../models";
+import { useCallback } from "react";
+import { createTeam as createNewTeam } from "../api/teamsApi";
+import { useRouter } from "next/router";
 
-export const useRooms = () => {
-  const { data, error, mutate } = useSWR(url, fetcher);
-  const socket = useContext(SocketContext);
+export const useRooms = ({
+  user,
+  changeTeam,
+}: {
+  user: User;
+  changeTeam: (teamId: string) => void;
+}) => {
+  const router = useRouter();
 
-  useEffect(() => {
-    socket.on("roomsUpdated", mutate);
-
-    return () => {
-      socket.removeListener("roomsUpdated", mutate);
-    };
-  }, [mutate, socket]);
+  const joinRoom = useCallback(
+    async (roomId: string) => {
+      const teamId = await createNewTeam({ name: `${user.name}'s team`, userId: user.id, roomId });
+      changeTeam(teamId);
+      router.push({ pathname: "/room", query: { id: roomId } }); // TODO: add "as" but have ability to refresh (with rewrites)
+    },
+    [changeTeam, user.id, user.name, router]
+  );
 
   return {
-    rooms: data as Room[],
-    isLoading: !error && !data,
-    isError: error as Error,
+    joinRoom,
   };
 };

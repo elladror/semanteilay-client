@@ -9,7 +9,7 @@ interface Props {
 }
 
 const Teams: FC<Props> = ({ room }) => {
-  const { switchTeam, name } = useTeam(room);
+  const { switchTeam, name } = useTeam();
 
   return (
     <Box

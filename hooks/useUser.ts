@@ -32,9 +32,9 @@ const useUser = () => {
     setUser({ ...user, teamId });
   };
 
-  const leaveTeam = () => {
+  const leaveTeam = useCallback(() => {
     setUser({ name: user.name, id: user.id });
-  };
+  }, [user.name, user.id, setUser]);
 
   useEffect(() => {
     socket.on("disconnect", signOut);
@@ -42,7 +42,7 @@ const useUser = () => {
     return () => {
       socket.removeListener("disconnect", signOut); // TODO: reconsider ux when refresh kicks you out
     };
-  }, [socket, user, signOut]);
+  }, [socket, signOut]);
 
   useEffect(() => {
     socket.on("kickFromTeam", leaveTeam);
