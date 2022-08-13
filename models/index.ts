@@ -18,6 +18,7 @@ export type Room = {
 };
 
 export type Guess = {
+  id: string;
   word: string;
   score: number;
   rank: number;

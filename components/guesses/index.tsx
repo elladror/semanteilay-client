@@ -9,7 +9,7 @@ const Guesses: FC = () => {
   const { guesses, addGuess, isLoading, isError } = useGuesses();
   const { user } = useUser();
 
-  if (isError || isLoading) return <h1>hi</h1>;
+  if (isError) return <h1>hi</h1>;
 
   return (
     <>

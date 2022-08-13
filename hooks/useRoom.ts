@@ -12,7 +12,6 @@ export const useRoom = (id: string) => {
     error,
     mutate,
   } = useSWR([url, id], fetcher, {
-    revalidateIfStale: true,
     revalidateOnFocus: false,
     revalidateOnReconnect: false,
   });

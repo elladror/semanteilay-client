@@ -4,17 +4,13 @@ import { createRoom } from "../../api/roomsApi";
 import { SocketContext } from "../../context/socket";
 import { useInput } from "../../hooks/useInput";
 import { useRooms } from "../../hooks/useRooms";
-import { User } from "../../models";
+import useUser from "../../hooks/useUser";
 
-interface Props {
-  user: User;
-  changeTeam: (teamId: string) => void;
-}
-
-const CreateRoom: FC<Props> = ({ user, changeTeam }) => {
+const CreateRoom: FC = () => {
   const { value: roomToAdd, setValue: setRoomToCreate, bind } = useInput("");
   const socket = useContext(SocketContext);
-  const { joinRoom } = useRooms({ changeTeam, user });
+  const { joinRoom } = useRooms();
+  const { user } = useUser();
 
   useEffect(() => {
     setRoomToCreate(`${user.name}'s room`);

@@ -8,11 +8,13 @@ export const createTeam = async ({
   name,
   userId,
   roomId,
+  oldTeamId,
 }: {
   name: string;
   userId: string;
   roomId: string;
-}) => post({ name, userId, roomId }) as Promise<string>;
+  oldTeamId?: string;
+}) => post({ name, userId, roomId, oldTeamId }) as Promise<string>;
 
 export const GET_TEAM_BY_ID_URL = `${SERVER_URL + BASE_URL}/`;
 

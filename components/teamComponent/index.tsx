@@ -4,16 +4,19 @@ import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import { FC } from "react";
-import { Team } from "../../models";
+import { Team, User } from "../../models";
 
 interface Props {
   team: Team;
-  onClick: () => void;
-  isCurrentTeam: boolean;
+  joinTeam: () => void;
+  currentUser: User;
   disabled: boolean;
+  leaveTeam: () => void;
 }
 
-const TeamComponent: FC<Props> = ({ team, onClick, isCurrentTeam = false, disabled }) => {
+const TeamComponent: FC<Props> = ({ team, joinTeam, currentUser, disabled, leaveTeam }) => {
+  const isCurrentTeam = currentUser.teamId === team.id;
+
   return (
     <Card sx={{ width: "11rem" }}>
       <CardContent>
@@ -24,11 +27,18 @@ const TeamComponent: FC<Props> = ({ team, onClick, isCurrentTeam = false, disabl
       </CardContent>
       <CardActions>
         {!isCurrentTeam ? (
-          <Button disabled={disabled} size="small" onClick={onClick}>
+          <Button disabled={disabled} size="small" onClick={joinTeam}>
             Join
           </Button>
         ) : (
-          <></>
+          <Button
+            sx={{ display: team.name === `${currentUser.name}'s team` ? "none" : "initial" }}
+            size="small"
+            onClick={leaveTeam}
+            color="error"
+          >
+            Leave
+          </Button>
         )}
       </CardActions>
     </Card>

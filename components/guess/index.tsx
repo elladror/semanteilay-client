@@ -10,7 +10,7 @@ interface Props {
 const Guess: FC<Props> = ({ guess }) => {
   return (
     <>
-      <TableRow sx={{ "&:not(:first-child) td": { border: 0, paddingTop: 1 } }}>
+      <TableRow sx={{ "&:not(:first-of-type) td": { border: 0, paddingTop: 1 } }}>
         <TableCell align="center" sx={{ width: 150 }}>
           <Rank rank={guess.rank} />
         </TableCell>

@@ -1,18 +1,16 @@
 import { FC, MouseEventHandler } from "react";
 import styles from "./rooms.module.css";
 import Typography from "@mui/material/Typography";
-import { Room, User } from "../../models";
+import { Room } from "../../models";
 import { useRooms } from "../../hooks/useRooms";
 import { Skeleton } from "@mui/material";
 
 interface RoomsProps {
-  user: User;
   rooms: Room[];
-  changeTeam: (teamId: string) => void;
 }
 
-const Rooms: FC<RoomsProps> = ({ rooms, changeTeam, user }) => {
-  const { joinRoom } = useRooms({ changeTeam, user });
+const Rooms: FC<RoomsProps> = ({ rooms }) => {
+  const { joinRoom } = useRooms();
 
   const enterRoom =
     (roomId: string): MouseEventHandler<HTMLDivElement> =>

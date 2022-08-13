@@ -4,7 +4,6 @@ export const SERVER_URL = process.env.NEXT_PUBLIC_SERVER_URL ?? "http://localhos
 export const getApi =
   (baseUrl: string) =>
   async (path = "", payload = {}) => {
-    console.log(`env: ${process.env.NEXT_PUBLIC_SERVER_URL}`);
     const res = await axios.get(`${SERVER_URL + baseUrl + path}`, {
       params: payload,
     });
@@ -17,8 +16,6 @@ export const getApi =
 export const postApi =
   (baseUrl: string) =>
   async (payload = {}, path = "") => {
-    console.log(process.env);
-
     const res = await axios.post(`${SERVER_URL + baseUrl + path}`, payload);
 
     if (res.status !== 200) throw new Error(`${res.status}: ${res.statusText}`);

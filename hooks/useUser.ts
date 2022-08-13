@@ -4,7 +4,6 @@ import { SocketContext } from "../context/socket";
 import { User } from "../models";
 import { signUp as saveUser } from "../api/userApi";
 import { UserContext, UserContextType } from "../context/userProvider";
-import { changeUserTeam } from "../api/teamsApi";
 
 const emptyUser: User = { name: "", id: "" };
 
@@ -14,6 +13,7 @@ const useUser = () => {
   const router = useRouter();
 
   const signOut = useCallback(() => {
+    // warning: this function may be called more than once
     setUser(emptyUser); // TODO: when server goes down the entities currently stay in DB
   }, [setUser]);
 
@@ -26,10 +26,11 @@ const useUser = () => {
     signIn({ id, name });
   };
 
-  const changeTeam = async (teamId: string, oldTeamId?: string) => {
-    await changeUserTeam({ userId: user.id, teamId, oldTeamId });
-    socket.emit("switchTeam", { newTeamId: teamId, oldTeamId: user.teamId });
-    setUser({ ...user, teamId });
+  const changeTeam = (teamId: string, oldTeamId?: string) => {
+    if (teamId !== oldTeamId) {
+      socket.emit("switchTeam", { newTeamId: teamId, oldTeamId: user.teamId });
+      setUser({ ...user, teamId });
+    }
   };
 
   const leaveTeam = useCallback(() => {
@@ -43,14 +44,6 @@ const useUser = () => {
       socket.removeListener("disconnect", signOut); // TODO: reconsider ux when refresh kicks you out
     };
   }, [socket, signOut]);
-
-  useEffect(() => {
-    socket.on("kickFromTeam", leaveTeam);
-
-    return () => {
-      socket.removeListener("kickFromTeam", leaveTeam);
-    };
-  });
 
   useEffect(() => {
     if (user.name === "" && router.pathname !== "/") {

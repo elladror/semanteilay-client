@@ -1,5 +1,5 @@
 import { Box } from "@mui/material";
-import { FC, useState } from "react";
+import { FC, useCallback, useState } from "react";
 import useTeam from "../../hooks/useTeam";
 import useUser from "../../hooks/useUser";
 import { Room } from "../../models";
@@ -10,9 +10,27 @@ interface Props {
 }
 
 const Teams: FC<Props> = ({ room }) => {
-  const { switchTeam } = useTeam();
+  const { switchTeam, leaveTeam } = useTeam();
   const { user } = useUser();
   const [isLoading, setLoading] = useState(false);
+
+  const joinTeamHandler = useCallback(
+    (teamId: string) => async () => {
+      setLoading(true);
+      await switchTeam(teamId);
+      setLoading(false);
+    },
+    [switchTeam]
+  );
+
+  const leaveTeamHandler = useCallback(
+    (roomId: string) => async () => {
+      setLoading(true);
+      await leaveTeam(roomId);
+      setLoading(false);
+    },
+    [leaveTeam]
+  );
 
   return (
     <Box
@@ -38,12 +56,9 @@ const Teams: FC<Props> = ({ room }) => {
           key={team.id}
           team={team}
           disabled={isLoading}
-          onClick={async () => {
-            setLoading(true);
-            await switchTeam(team.id);
-            setLoading(false);
-          }}
-          isCurrentTeam={user.teamId === team.id}
+          joinTeam={joinTeamHandler(team.id)}
+          leaveTeam={leaveTeamHandler(room.id)}
+          currentUser={user}
         ></TeamComponent>
       ))}
     </Box>
