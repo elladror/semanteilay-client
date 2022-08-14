@@ -13,8 +13,12 @@ export type Team = {
 export type Room = {
   id: string;
   name: string;
-  teams: Team[];
-  participantCount?: number;
+  teams: (Team & {
+    _count?: {
+      members: number;
+      guesses: number;
+    };
+  })[];
 };
 
 export type Guess = {
