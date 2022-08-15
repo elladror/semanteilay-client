@@ -8,6 +8,14 @@ export type Team = {
   id: string;
   name: string;
   members: User;
+  topGuess: {
+    score: number;
+    rank: number;
+  };
+  _count?: {
+    members: number;
+    guesses: number;
+  };
 };
 
 export type Room = {
@@ -17,6 +25,10 @@ export type Room = {
     _count?: {
       members: number;
       guesses: number;
+    };
+    topGuess: {
+      score: number;
+      rank: number;
     };
   })[];
 };
@@ -35,4 +47,5 @@ export type GuessCreationInput = {
   word: string;
   ownerId: string;
   teamId: string;
+  roomId: string;
 };

@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import { FC, useMemo } from "react";
+import { FC } from "react";
 import { useRoom } from "../../hooks/useRoom";
 import Guesses from "../../components/guesses";
 import IconButton from "@mui/material/IconButton";
@@ -10,13 +10,8 @@ import Box from "@mui/material/Box";
 
 const Room: FC = () => {
   const router = useRouter();
-  const { room, isLoading, isError, leaveRoom } = useRoom((router.query.id as string) ?? "-");
-  const participantCount = useMemo(
-    () =>
-      room?.teams.reduce((participantCount, team) => {
-        return participantCount + (team._count?.members ?? 0);
-      }, 0) ?? 0,
-    [room?.teams]
+  const { room, isLoading, isError, leaveRoom, participantCount } = useRoom(
+    (router.query.id as string) ?? "-"
   );
 
   if (isLoading || isError) return <h1></h1>;
@@ -33,7 +28,7 @@ const Room: FC = () => {
         </span>
       </Typography>
       <hr />
-      <Guesses />
+      <Guesses room={room} />
       <Box sx={{ my: 4 }}></Box>
       <Teams room={room} />
     </>

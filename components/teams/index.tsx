@@ -35,9 +35,9 @@ const Teams: FC<Props> = ({ room }) => {
   return (
     <Box
       sx={{
-        display: { xs: "-webkit-box", sm: "flex" },
+        display: { xs: "-webkit-box", sm: "flex", pb: "2rem" },
         gap: 1,
-        maxWidth: { xs: 300, sm: 600, md: 900, lg: 1100 },
+        maxWidth: { xs: 350, sm: 600, md: 900, lg: 1100 },
         scrollSnapType: "x mandatory",
         "& > *": {
           scrollSnapAlign: "center",

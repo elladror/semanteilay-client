@@ -4,8 +4,13 @@ import { useGuesses } from "../../hooks/useGuesses";
 import useUser from "../../hooks/useUser";
 import Guess from "../guess";
 import { Table, TableBody, TableCell, TableHead, TableRow } from "@mui/material";
+import { Room } from "../../models";
 
-const Guesses: FC = () => {
+interface GuessesProps {
+  room: Room;
+}
+
+const Guesses: FC<GuessesProps> = ({ room }) => {
   const { guesses, addGuess, isLoading, isError } = useGuesses();
   const { user } = useUser();
 
@@ -20,6 +25,7 @@ const Guesses: FC = () => {
               word,
               ownerId: user.id,
               teamId: user.teamId as string,
+              roomId: room.id,
             });
           } catch (err) {
             console.log("Don't know that word"); // TODO: implement don't know the word

@@ -38,7 +38,7 @@ export const useGuesses = () => {
     revalidateOnFocus: false,
     revalidateOnReconnect: false,
   });
-  const [guesses, dispatch] = useReducer(reducer, []);
+  const [guesses, dispatch] = useReducer(reducer, []); // TODO: test if init function can replace useEffect
 
   useEffect(() => {
     dispatch({ payload: data ?? ([] as Guess[]), type: "update" });

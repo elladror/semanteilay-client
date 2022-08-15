@@ -1,10 +1,12 @@
-import { Button } from "@mui/material";
+import { Avatar, Badge, Box, Button } from "@mui/material";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import { FC } from "react";
 import { Team, User } from "../../models";
+import Rank from "../rank";
+import PersonIcon from "@mui/icons-material/Person";
 
 interface Props {
   team: Team;
@@ -16,14 +18,45 @@ interface Props {
 
 const TeamComponent: FC<Props> = ({ team, joinTeam, currentUser, disabled, leaveTeam }) => {
   const isCurrentTeam = currentUser.teamId === team.id;
+  const { name, topGuess, _count } = team;
 
   return (
-    <Card sx={{ width: "11rem" }}>
+    <Card raised={true} sx={{ width: "12.5rem" }}>
       <CardContent>
-        <Typography fontWeight="500" variant="body1">
-          {team.name}
-        </Typography>
-        <Typography variant="body2">top guess:</Typography>
+        <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+          <Typography fontWeight="500" variant="body1" sx={{ pb: "1rem" }}>
+            {name}
+          </Typography>{" "}
+          <Badge badgeContent={_count?.members ?? 0} color="primary">
+            <PersonIcon color="action" />
+          </Badge>
+        </Box>
+        <Box sx={{ display: "flex", justifyContent: "center", pb: "0.5rem" }}>
+          <Avatar
+            sx={{
+              width: "2.5rem",
+              height: "2.5rem",
+              fontSize: "0.8rem",
+              visibility: topGuess.score === 0 ? "hidden" : "initial",
+            }}
+          >
+            {topGuess.score}
+          </Avatar>
+        </Box>
+        <Box sx={{ display: "flex", justifyContent: "center" }}>
+          <Box sx={{ width: "8rem" }}>
+            <Rank rank={topGuess.rank}></Rank>
+          </Box>
+        </Box>
+        <Box sx={{ display: "flex", justifyContent: "center" }}>
+          <Typography fontSize={"0.7rem"}>
+            {topGuess.score === 0
+              ? "(יאללה להתחיל לנחש)"
+              : topGuess.rank > 0
+              ? `${topGuess.rank} / 1000`
+              : `(לא מתקרבים פה אפילו)`}
+          </Typography>
+        </Box>
       </CardContent>
       <CardActions>
         {!isCurrentTeam ? (
@@ -32,10 +65,10 @@ const TeamComponent: FC<Props> = ({ team, joinTeam, currentUser, disabled, leave
           </Button>
         ) : (
           <Button
-            sx={{ display: team.name === `${currentUser.name}'s team` ? "none" : "initial" }}
             size="small"
             onClick={leaveTeam}
             color="error"
+            sx={{ display: team.name === `${currentUser.name}'s team` ? "none" : "initial" }}
           >
             Leave
           </Button>
