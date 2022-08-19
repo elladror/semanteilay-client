@@ -16,7 +16,7 @@ const Login: FC = () => {
   const { signUp } = useUser();
 
   useEffect(() => {
-    router.prefetch("/lobby");
+    router.prefetch("/");
   }, [router]);
 
   useEffect(() => {
@@ -35,7 +35,7 @@ const Login: FC = () => {
     try {
       await signUp({ name });
       setLastNickname(name);
-      router.push("/lobby");
+      router.push("/");
     } catch (error) {
       if ((error as AxiosError).response?.status === 409) {
         setWarning("Name Taken");

@@ -28,4 +28,4 @@ export const changeUserTeam = async ({
   userId: string;
   teamId: string;
   oldTeamId?: string;
-}) => await patch({ userId, teamId, oldTeamId });
+}) => await patch({ payload: { userId, teamId, oldTeamId } });

@@ -22,15 +22,13 @@ const Room: FC = () => {
       <IconButton color="secondary" onClick={leaveRoom} sx={{ alignSelf: "flex-start" }}>
         <ArrowBackIcon />
       </IconButton>
-      <Typography variant="h3">
+      <Typography variant="h3" sx={{ my: 4 }}>
         <span key={participantCount} className="flip-animate">
           {room.name} With <span data-hover={participantCount}>{participantCount}</span> Players
         </span>
       </Typography>
-      <hr />
-      <Guesses room={room} />
-      <Box sx={{ my: 4 }}></Box>
       <Teams room={room} />
+      <Guesses room={room} />
     </>
   );
 };

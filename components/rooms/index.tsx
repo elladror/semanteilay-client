@@ -15,7 +15,11 @@ const Rooms: FC<RoomsProps> = ({ rooms }) => {
   const enterRoom =
     (roomId: string): MouseEventHandler<HTMLDivElement> =>
     (_event) => {
-      joinRoom(roomId);
+      try {
+        joinRoom(roomId);
+      } catch (error) {
+        console.error("couldn't join room"); // TODO: implement normally
+      }
     };
 
   return (

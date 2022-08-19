@@ -5,6 +5,8 @@ import { Room, Team } from "../models";
 import { SocketContext } from "../context/socket";
 import { useContext, useEffect, useCallback, useMemo, useReducer } from "react";
 import { useRouter } from "next/router";
+import { leaveRoom as userLeaveRoom } from "../api/userApi";
+import useUser from "./useUser";
 
 function reducer(
   state: Room,
@@ -40,6 +42,7 @@ export const useRoom = (id: string) => {
   const router = useRouter();
   const [room, dispatch] = useReducer(reducer, {} as Room);
   const isLoading = !room?.id && !error;
+  const { user } = useUser();
 
   const refetch = useCallback(() => {
     mutate();
@@ -48,17 +51,6 @@ export const useRoom = (id: string) => {
   useEffect(() => {
     dispatch({ payload: data, type: "update" });
   }, [data]);
-
-  useEffect(() => {
-    if (room.id) {
-      socket.emit("joinRoom", room);
-
-      return () => {
-        socket.emit("leaveRoom", room);
-      };
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isLoading, socket]); // happens once after the data
 
   useEffect(() => {
     const update = (payload: { teamId: string; topGuess: { score: number; rank: number } }) => {
@@ -90,9 +82,11 @@ export const useRoom = (id: string) => {
     };
   }, [refetch, socket]);
 
-  function leaveRoom() {
-    router.push("/lobby");
-  }
+  const leaveRoom = useCallback(async () => {
+    await userLeaveRoom({ roomId: room.id, userId: user.id });
+    socket.emit("leaveRoom", room.id);
+    router.push("/");
+  }, [room?.id, router, socket, user.id]);
 
   const participantCount = useMemo(
     () =>
