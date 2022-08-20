@@ -34,7 +34,7 @@ function reducer(
 }
 
 export const useRoom = (id: string) => {
-  const { data, error, mutate } = useSWR([url, id], fetcher, {
+  const { data, error, mutate } = useSWR(id ? [url, id] : null, fetcher, {
     revalidateOnFocus: false,
     revalidateOnReconnect: false,
   });

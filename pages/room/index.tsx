@@ -6,12 +6,11 @@ import IconButton from "@mui/material/IconButton";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import Typography from "@mui/material/Typography";
 import Teams from "../../components/teams";
-import Box from "@mui/material/Box";
 
 const Room: FC = () => {
   const router = useRouter();
   const { room, isLoading, isError, leaveRoom, participantCount } = useRoom(
-    (router.query.id as string) ?? "-"
+    router.query.id as string
   );
 
   if (isLoading || isError) return <h1></h1>;
