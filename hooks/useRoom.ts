@@ -55,7 +55,6 @@ export const useRoom = (id: string) => {
   useEffect(() => {
     const update = (payload: { teamId: string; topGuess: { score: number; rank: number } }) => {
       dispatch({ payload, type: "add" });
-      console.log(room);
     };
 
     socket.on("topGuessUpdate", update);
@@ -63,7 +62,6 @@ export const useRoom = (id: string) => {
     return () => {
       socket.removeListener("topGuessUpdate", update);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [socket]);
 
   useEffect(() => {
@@ -83,7 +81,7 @@ export const useRoom = (id: string) => {
   }, [refetch, socket]);
 
   const leaveRoom = useCallback(async () => {
-    await userLeaveRoom({ roomId: room.id, userId: user.id });
+    await userLeaveRoom({ roomId: room.id, userId: user.id, socketId: socket.id });
     socket.emit("leaveRoom", room.id);
     router.push("/");
   }, [room?.id, router, socket, user.id]);

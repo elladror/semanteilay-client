@@ -4,6 +4,7 @@ import Typography from "@mui/material/Typography";
 import { Room } from "../../models";
 import { useRooms } from "../../hooks/useRooms";
 import { Skeleton } from "@mui/material";
+import useUser from "../../hooks/useUser";
 
 interface RoomsProps {
   rooms: Room[];
@@ -11,12 +12,13 @@ interface RoomsProps {
 
 const Rooms: FC<RoomsProps> = ({ rooms }) => {
   const { joinRoom } = useRooms();
+  const { user } = useUser();
 
   const enterRoom =
     (roomId: string): MouseEventHandler<HTMLDivElement> =>
     (_event) => {
       try {
-        joinRoom(roomId);
+        joinRoom({ roomId, userId: user.id });
       } catch (error) {
         console.error("couldn't join room"); // TODO: implement normally
       }

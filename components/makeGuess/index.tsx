@@ -4,9 +4,10 @@ import { useInput } from "../../hooks/useInput";
 
 interface Props {
   handleGuess: (guess: string) => void;
+  disable: boolean;
 }
 
-const MakeGuess: FC<Props> = ({ handleGuess: handleCreate }) => {
+const MakeGuess: FC<Props> = ({ handleGuess: handleCreate, disable }) => {
   const { value: roomToAdd, bind, reset } = useInput("");
 
   const handleSubmit: FormEventHandler<HTMLFormElement> = (event) => {
@@ -23,7 +24,7 @@ const MakeGuess: FC<Props> = ({ handleGuess: handleCreate }) => {
         label="make your guess"
         sx={{ margin: 1, direction: "rtl" }}
       />
-      <Button variant="contained" type="submit" sx={{ width: "15ch" }}>
+      <Button disabled={disable} variant="contained" type="submit" sx={{ width: "15ch" }}>
         <b>guess</b>
       </Button>
     </form>

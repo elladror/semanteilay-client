@@ -15,20 +15,14 @@ export const login = async ({ userId, socketId }: { userId: string; socketId: st
 export const setIdle = async (userId: string) =>
   (await patch({ path: "/idle", payload: { userId } })) as User;
 
-export const leaveRoom = async ({ userId, roomId }: { userId: string; roomId: string }) =>
+export const leaveRoom = async (payload: { userId: string; roomId: string; socketId: string }) =>
   patch({
     path: "/leaveRoom",
-    payload: {
-      userId,
-      roomId,
-    },
+    payload,
   });
 
-export const joinRoom = async ({ userId, roomId }: { userId: string; roomId: string }) =>
+export const joinRoom = async (payload: { userId: string; roomId: string; socketId: string }) =>
   patch({
     path: "/joinRoom",
-    payload: {
-      userId,
-      roomId,
-    },
+    payload,
   });

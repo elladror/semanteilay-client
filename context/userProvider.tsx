@@ -3,11 +3,12 @@ import { User } from "../models";
 import { SocketContext } from "../context/socket";
 import { useRouter } from "next/router";
 import { useLocalStorage } from "usehooks-ts";
-import { login, setIdle } from "../api/userApi";
+import { joinRoom, login, setIdle } from "../api/userApi";
 
 export type UserContextType = {
   user: User;
   setTeam: (teamId: string) => void;
+  setRoom: (teamId: string) => void;
   signIn: (user: User) => void;
 };
 
@@ -25,28 +26,55 @@ export const UserProvider: FC<Props> = ({ children }) => {
   const router = useRouter();
   const [userId, setUserId] = useLocalStorage("se-userId", "");
   const [isLoading, setLoading] = useState(false);
+  const [isReady, setReady] = useState(false);
 
-  const socketConnectHandler = useCallback(async () => {
-    setLoading(true);
+  const socketConnectHandler = useCallback(
+    async (id?: string) => {
+      setLoading(true);
 
-    try {
-      if (!userId) throw new Error();
+      if ((isReady || id) && socket.connected) {
+        console.log("router is ready");
+        const queryRoomId = id ?? (router.query.id as string);
 
-      const loggedInUser = await login({ userId, socketId: socket.id });
-      setUser(loggedInUser);
-      const { roomId } = loggedInUser;
+        try {
+          if (!userId) throw new Error();
 
-      if (roomId) {
-        socket.emit("joinRoom", roomId);
-        router.push({ pathname: "/room", query: { id: roomId } });
+          const loggedInUser = await login({ userId, socketId: socket.id });
+          setUser(loggedInUser);
+          const { roomId } = loggedInUser;
+
+          if (router.pathname === "/room" && queryRoomId !== undefined && queryRoomId !== roomId) {
+            await joinRoom({ userId, roomId: queryRoomId, socketId: socket.id });
+            setUser({ ...loggedInUser, roomId: queryRoomId });
+            socket.emit("joinRoom", queryRoomId);
+            router.push({ pathname: "/room", query: { id: queryRoomId } });
+          } else if (roomId) {
+            socket.emit("joinRoom", roomId);
+            router.push({ pathname: "/room", query: { id: roomId } });
+          } else {
+            router.push("/");
+          }
+        } catch (error) {
+          setUserId("");
+          router.push("/login");
+        } finally {
+          router.events.on("routeChangeComplete", () => setLoading(false));
+          router.events.on("routeChangeError", () => router.push("/login"));
+          // setLoading(false); // TODO: fix flash of other page with router.events.on("routeChangeComplete")
+        }
+      } else {
+        console.log("router is not ready");
       }
-    } catch (error) {
-      setUserId("");
-      router.push("/login");
-    } finally {
-      setLoading(false); // TODO: fix flash of other page with router.events.on("routeChangeComplete")
+    },
+    [router, setUserId, socket, userId, isReady]
+  );
+
+  useEffect(() => {
+    if (router.isReady && !isReady) {
+      setReady(true);
+      socketConnectHandler(router.query.id as string);
     }
-  }, [router, setUserId, socket, userId]);
+  }, [setReady, socketConnectHandler, isReady, router]);
 
   useEffect(() => {
     socket.on("connect", socketConnectHandler);
@@ -70,6 +98,13 @@ export const UserProvider: FC<Props> = ({ children }) => {
     setUser({ ...user, teamId });
   };
 
+  const setRoom = useCallback(
+    (roomId: string) => {
+      setUser({ ...user, roomId });
+    },
+    [user]
+  );
+
   useEffect(() => {
     socket.on("disconnect", socketDisconnectHandler);
 
@@ -80,7 +115,11 @@ export const UserProvider: FC<Props> = ({ children }) => {
 
   if (isLoading) return <></>; // TODO: implement loader or something
 
-  return <UserContext.Provider value={{ user, setTeam, signIn }}>{children}</UserContext.Provider>;
+  return (
+    <UserContext.Provider value={{ user, setTeam, signIn, setRoom }}>
+      {children}
+    </UserContext.Provider>
+  );
 };
 
 export const useCurrentUser = () => useContext(UserContext);

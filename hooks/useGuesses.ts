@@ -1,7 +1,7 @@
 import { addGuess as postGuess, GET_ALL_TEAM_GUESSES_URL as url } from "../api/guessApi";
 import { fetcher } from "../api/api";
 import useSWR from "swr";
-import { Guess, GuessCreationInput } from "../models";
+import { Guess, GuessCreationInput, Room } from "../models";
 import { useContext, useEffect, useReducer } from "react";
 import useUser from "./useUser";
 import { SocketContext } from "../context/socket";
@@ -31,10 +31,11 @@ function reducer(
   }
 }
 
-export const useGuesses = () => {
+export const useGuesses = ({ isUserTeamInRoom }: { isUserTeamInRoom: boolean }) => {
   const socket = useContext(SocketContext);
   const { user } = useUser();
-  const { data, error } = useSWR([url, user.teamId], fetcher, {
+
+  const { data, error } = useSWR(isUserTeamInRoom ? [url, user.teamId] : null, fetcher, {
     revalidateOnFocus: false,
     revalidateOnReconnect: false,
   });
@@ -76,5 +77,6 @@ export const useGuesses = () => {
     isLoading: !error && !guesses,
     isError: !!error,
     addGuess,
+    isUserTeamInRoom,
   };
 };

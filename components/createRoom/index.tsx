@@ -20,7 +20,7 @@ const CreateRoom: FC = () => {
     try {
       const { id } = await createRoom(roomName);
       socket.emit("create-room");
-      await joinRoom(id);
+      await joinRoom({ roomId: id, userId: user.id });
     } catch (error) {
       console.error("failed to create new room"); // TODO: add normal indication
     }

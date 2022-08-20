@@ -64,12 +64,7 @@ const TeamComponent: FC<Props> = ({ team, joinTeam, currentUser, disabled, leave
             Join
           </Button>
         ) : (
-          <Button
-            size="small"
-            onClick={leaveTeam}
-            color="error"
-            sx={{ display: team.name === `${currentUser.name}'s team` ? "none" : "initial" }}
-          >
+          <Button size="small" onClick={leaveTeam} color="error">
             Leave
           </Button>
         )}

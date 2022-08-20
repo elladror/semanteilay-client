@@ -5,7 +5,7 @@ import { signUp as saveUser } from "../api/userApi";
 import { UserContext, UserContextType } from "../context/userProvider";
 
 const useUser = () => {
-  const { user, signIn, setTeam } = useContext(UserContext) as UserContextType;
+  const { user, signIn, setTeam, setRoom } = useContext(UserContext) as UserContextType;
   const socket = useContext(SocketContext);
 
   const signUp = useCallback(
@@ -27,11 +27,17 @@ const useUser = () => {
     }
   };
 
+  const changeRoom = (roomId: string) => {
+    if (user.roomId !== roomId) {
+      setRoom(roomId);
+    }
+  };
+
   const leaveTeam = useCallback(() => {
     setTeam("");
   }, [setTeam]);
 
-  return { user, signUp, changeTeam, leaveTeam };
+  return { user, signUp, changeTeam, leaveTeam, changeRoom };
 };
 
 export default useUser;
