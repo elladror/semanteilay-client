@@ -34,8 +34,11 @@ const useUser = () => {
   };
 
   const leaveTeam = useCallback(() => {
-    setTeam("");
-  }, [setTeam]);
+    if (user.teamId) {
+      socket.emit("leaveTeam", user.teamId)
+      setTeam("");
+    }
+  }, [setTeam, user.teamId, socket]);
 
   return { user, signUp, changeTeam, leaveTeam, changeRoom };
 };
