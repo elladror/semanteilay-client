@@ -48,6 +48,7 @@ export const useGuesses = ({ isUserTeamInRoom }: { isUserTeamInRoom: boolean }) 
   useEffect(() => {
     const addGuess = (guess: Guess) => {
       dispatch({ payload: guess, type: "add" });
+      console.log(`guess recieved ${guess}`);
     };
     socket.on("newGuess", addGuess);
 

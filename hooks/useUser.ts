@@ -22,7 +22,8 @@ const useUser = () => {
 
   const changeTeam = (teamId: string, oldTeamId?: string) => {
     if (teamId !== oldTeamId) {
-      socket.emit("switchTeam", { newTeamId: teamId, oldTeamId: user.teamId });
+      socket.emit("switchTeam", { newTeamId: teamId, oldTeamId });
+      console.log(`emitted switch team from ${oldTeamId} to ${teamId}`);
       setTeam(teamId);
     }
   };
