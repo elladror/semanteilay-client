@@ -52,25 +52,30 @@ const PlayersPopover: FC<Props> = ({ memberCount, members }) => {
             p: "0.5rem",
           }}
         >
-          {members.map((member) => (
-            <Box
-              key={member.id}
-              sx={{
-                paddingInline: "1rem",
-                pb: "0.2rem",
-                display: "flex",
-                justifyContent: "space-between",
-              }}
-            >
-              <Typography fontWeight="500" variant="body1">
-                {member.name}
-              </Typography>
-              <CircleIcon
-                fontSize="small"
-                color={member.status === "ACTIVE" ? "success" : "disabled"}
-              />
-            </Box>
-          ))}
+          {[...members]
+            .sort(
+              ({ status: a }, { status: b }) => (a === "IDLE" ? 1 : -1) - (b === "IDLE" ? 1 : -1)
+            )
+            .map((member) => (
+              <Box
+                key={member.id}
+                sx={{
+                  paddingInline: "1rem",
+                  pb: "0.2rem",
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                }}
+              >
+                <Typography fontWeight="500" variant="body1">
+                  {member.name}
+                </Typography>
+                <CircleIcon
+                  fontSize="small"
+                  color={member.status === "ACTIVE" ? "success" : "disabled"}
+                />
+              </Box>
+            ))}
         </Box>
       </Popover>
     </>
