@@ -23,7 +23,6 @@ const useUser = () => {
   const changeTeam = (teamId: string, oldTeamId?: string) => {
     if (teamId !== oldTeamId) {
       socket.emit("switchTeam", { newTeamId: teamId, oldTeamId });
-      console.log(`emitted switch team from ${oldTeamId} to ${teamId}`);
       setTeam(teamId);
     }
   };
@@ -36,7 +35,7 @@ const useUser = () => {
 
   const leaveTeam = useCallback(() => {
     if (user.teamId) {
-      socket.emit("leaveTeam", user.teamId)
+      socket.emit("leaveTeam", user.teamId);
       setTeam("");
     }
   }, [setTeam, user.teamId, socket]);

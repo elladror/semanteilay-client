@@ -1,12 +1,12 @@
-import { Avatar, Badge, Box, Button } from "@mui/material";
+import { Avatar, Box, Button } from "@mui/material";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import { FC } from "react";
 import { Team, User } from "../../models";
+import PlayersPopover from "../playersPopover";
 import Rank from "../rank";
-import PersonIcon from "@mui/icons-material/Person";
 
 interface Props {
   team: Team;
@@ -27,9 +27,7 @@ const TeamComponent: FC<Props> = ({ team, joinTeam, currentUser, disabled, leave
           <Typography fontWeight="500" variant="body1" sx={{ pb: "1rem" }}>
             {name}
           </Typography>{" "}
-          <Badge badgeContent={_count?.members ?? 0} color="primary">
-            <PersonIcon color="action" />
-          </Badge>
+          <PlayersPopover memberCount={_count?.members} members={team.members} />
         </Box>
         <Box sx={{ display: "flex", justifyContent: "center", pb: "0.5rem" }}>
           <Avatar

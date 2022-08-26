@@ -47,11 +47,11 @@ export const UserProvider: FC<Props> = ({ children }) => {
             await joinRoom({ userId, roomId: queryRoomId, socketId: socket.id });
             setUser({ ...loggedInUser, roomId: queryRoomId });
             socket.emit("joinRoom", queryRoomId);
-            socket.emit("switchTeam", {newTeamId: user.teamId})
+            socket.emit("switchTeam", { newTeamId: user.teamId });
             router.push({ pathname: "/room", query: { id: queryRoomId } });
           } else if (roomId) {
             socket.emit("joinRoom", roomId);
-            socket.emit("switchTeam", {newTeamId: user.teamId})
+            socket.emit("switchTeam", { newTeamId: user.teamId });
             router.push({ pathname: "/room", query: { id: roomId } });
           } else {
             router.push("/");
@@ -87,7 +87,6 @@ export const UserProvider: FC<Props> = ({ children }) => {
   }, [socketConnectHandler, socket]);
 
   const socketDisconnectHandler = useCallback(() => {
-    console.log("set idle called");
     setIdle(user.id);
   }, [user?.id]);
 

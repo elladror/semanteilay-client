@@ -57,7 +57,7 @@ const Guesses: FC<GuessesProps> = ({ room, isUserTeamInRoom }) => {
           </TableHead>
           <TableBody>
             {guesses.map((guess) => (
-              <Guess key={guess.word} guess={guess} />
+              <Guess key={guess.id} guess={guess} />
             ))}
           </TableBody>
         </Table>

@@ -3,12 +3,13 @@ export type User = {
   name: string;
   teamId?: string;
   roomId?: string;
+  status?: "IDLE" | "ACTIVE";
 };
 
 export type Team = {
   id: string;
   name: string;
-  members: User;
+  members: User[];
   topGuess: {
     score: number;
     rank: number;
