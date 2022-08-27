@@ -86,10 +86,6 @@ export const UserProvider: FC<Props> = ({ children }) => {
     };
   }, [socketConnectHandler, socket]);
 
-  const socketDisconnectHandler = useCallback(() => {
-    setIdle(user.id);
-  }, [user?.id]);
-
   const signIn = (user: User) => {
     setUser(user);
     setUserId(user.id);
@@ -107,12 +103,16 @@ export const UserProvider: FC<Props> = ({ children }) => {
   );
 
   useEffect(() => {
+    const socketDisconnectHandler = () => {
+      setIdle(user.id);
+    };
+
     socket.on("disconnect", socketDisconnectHandler);
 
     return () => {
       socket.removeListener("disconnect", socketDisconnectHandler);
     };
-  }, [socket, socketDisconnectHandler]);
+  }, [socket, user.id]);
 
   if (isLoading) return <></>; // TODO: implement loader or something
 
@@ -122,5 +122,3 @@ export const UserProvider: FC<Props> = ({ children }) => {
     </UserContext.Provider>
   );
 };
-
-export const useCurrentUser = () => useContext(UserContext);
