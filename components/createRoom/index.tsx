@@ -1,4 +1,5 @@
-import { Button, TextField } from "@mui/material";
+import Button from "@mui/material/Button";
+import TextField from "@mui/material/TextField";
 import { FC, FormEventHandler, useContext, useEffect } from "react";
 import { createRoom } from "../../api/roomsApi";
 import { SocketContext } from "../../context/socket";

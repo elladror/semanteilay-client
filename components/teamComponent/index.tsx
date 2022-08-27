@@ -1,4 +1,6 @@
-import { Avatar, Box, Button } from "@mui/material";
+import Avatar from "@mui/material/Avatar";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
@@ -47,7 +49,7 @@ const TeamComponent: FC<Props> = ({ team, joinTeam, currentUser, disabled, leave
           </Box>
         </Box>
         <Box sx={{ display: "flex", justifyContent: "center" }}>
-          <Typography fontSize={"0.7rem"}>
+          <Typography fontSize={"0.75rem"}>
             {topGuess.score === 0
               ? "(יאללה להתחיל לנחש)"
               : topGuess.rank > 0

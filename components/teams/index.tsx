@@ -1,4 +1,5 @@
-import { Box, Button } from "@mui/material";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
 import { FC, useCallback, useState } from "react";
 import useTeam from "../../hooks/useTeam";
 import useUser from "../../hooks/useUser";

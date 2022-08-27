@@ -3,8 +3,8 @@ import styles from "./rooms.module.css";
 import Typography from "@mui/material/Typography";
 import { Room } from "../../models";
 import { useRooms } from "../../hooks/useRooms";
-import { Skeleton } from "@mui/material";
 import useUser from "../../hooks/useUser";
+import Skeleton from "@mui/material/Skeleton";
 
 interface RoomsProps {
   rooms: Room[];

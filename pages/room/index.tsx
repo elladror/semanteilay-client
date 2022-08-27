@@ -6,7 +6,7 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import Typography from "@mui/material/Typography";
 import Teams from "../../components/teams";
 import Button from "@mui/material/Button";
-import { Avatar } from "@mui/material";
+import Avatar from "@mui/material/Avatar";
 import theme from "../../src/theme";
 import useUser from "../../hooks/useUser";
 
@@ -17,10 +17,11 @@ const Room: FC = () => {
   );
   const { user } = useUser();
 
-  const isUserTeamInRoom = useMemo(() => {
-    if (!isLoading || isError) return room.teams.map((team) => team.id).includes(user.teamId ?? "");
-    return false;
-  }, [isLoading, isError, room?.teams, user.teamId]);
+  const isUserTeamInRoom = useMemo(
+    () =>
+      isLoading || isError ? false : room.teams.map(({ id }) => id).includes(user.teamId ?? ""),
+    [isLoading, isError, room?.teams, user.teamId]
+  );
 
   if (isLoading || isError) return <h1></h1>;
   // TODO: add proper handling
