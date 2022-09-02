@@ -20,12 +20,20 @@ const MakeGuess: FC<Props> = ({ handleGuess: handleCreate, disable }) => {
   return (
     <form onSubmit={handleSubmit}>
       <TextField
-        variant="standard"
+        variant="outlined"
         {...bind}
         label="make your guess"
-        sx={{ margin: 1, direction: "rtl" }}
+        sx={{ direction: "rtl" }}
+        autoComplete="off"
+        type={"search"}
+        InputProps={{ sx: { borderTopRightRadius: 0, borderBottomRightRadius: 0 } }}
       />
-      <Button disabled={disable} variant="contained" type="submit" sx={{ width: "15ch" }}>
+      <Button
+        disabled={disable}
+        variant="contained"
+        type="submit"
+        sx={{ width: "15ch", borderTopLeftRadius: 0, borderBottomLeftRadius: 0 }}
+      >
         <b>guess</b>
       </Button>
     </form>
