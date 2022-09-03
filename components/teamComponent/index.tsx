@@ -25,8 +25,16 @@ const TeamComponent: FC<Props> = ({ team, joinTeam, currentUser, disabled, leave
   return (
     <Card raised={true} sx={{ width: "12.5rem" }}>
       <CardContent>
-        <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-          <Typography fontWeight="500" variant="body1" sx={{ pb: "1rem" }}>
+        <Box sx={{ display: "flex", justifyContent: "space-between", pb: "1rem" }}>
+          <Typography
+            fontWeight="500"
+            variant="body1"
+            sx={{
+              textOverflow: "ellipsis",
+              overflow: "hidden",
+              whiteSpace: "nowrap",
+            }}
+          >
             {name}
           </Typography>{" "}
           <PlayersPopover memberCount={_count?.members} members={team.members} />

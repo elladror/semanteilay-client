@@ -30,7 +30,7 @@ const PlayersPopover: FC<Props> = ({ memberCount, members }) => {
 
   return (
     <>
-      <Button onClick={handleClick}>
+      <Button onClick={handleClick} sx={{ p: 0 }}>
         <Badge badgeContent={memberCount ?? 0} color="primary">
           <PersonIcon color="action" />
         </Badge>

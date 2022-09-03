@@ -27,7 +27,7 @@ const Guess: FC<Props> = ({
         <TableCell align="center">{score}</TableCell>
         <TableCell
           align="center"
-          sx={{ maxWidth: 20, textOverflow: "ellipsis", overflow: "hidden" }}
+          sx={{ maxWidth: 20, textOverflow: "ellipsis", overflow: "hidden", whiteSpace: "nowrap" }}
         >
           {guesser}
         </TableCell>
