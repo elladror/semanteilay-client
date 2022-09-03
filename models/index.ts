@@ -40,7 +40,9 @@ export type Guess = {
   word: string;
   score: number;
   rank: number;
-  owner: string;
+  owner: {
+    name: string;
+  };
   team: string;
   serialNumber: number;
 };

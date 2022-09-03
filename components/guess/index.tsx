@@ -8,18 +8,31 @@ interface Props {
   guess: Guess;
 }
 
-const Guess: FC<Props> = ({ guess }) => {
+const Guess: FC<Props> = ({
+  guess: {
+    rank,
+    word,
+    score,
+    owner: { name: guesser },
+    serialNumber,
+  },
+}) => {
   return (
     <>
       <TableRow sx={{ "&:not(:first-of-type) td": { border: 0, paddingTop: 1 } }}>
         <TableCell align="center" sx={{ width: 150 }}>
-          <Rank rank={guess.rank} />
+          <Rank rank={rank} />
         </TableCell>
-        <TableCell align="center">{guess.rank > 0 ? `${guess.rank} / 1000` : `(קר)`}</TableCell>
-        <TableCell align="center">{guess.word}</TableCell>
-        <TableCell align="center">{guess.score}</TableCell>
+        <TableCell align="center">{word}</TableCell>
+        <TableCell align="center">{score}</TableCell>
+        <TableCell
+          align="center"
+          sx={{ maxWidth: 20, textOverflow: "ellipsis", overflow: "hidden" }}
+        >
+          {guesser}
+        </TableCell>
         <TableCell align="center" sx={{ width: 20 }}>
-          {guess.serialNumber}
+          {serialNumber}
         </TableCell>
       </TableRow>
     </>

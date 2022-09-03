@@ -44,17 +44,18 @@ const TeamComponent: FC<Props> = ({ team, joinTeam, currentUser, disabled, leave
           </Avatar>
         </Box>
         <Box sx={{ display: "flex", justifyContent: "center" }}>
-          <Box sx={{ width: "8rem" }}>
-            <Rank rank={topGuess.rank}></Rank>
-          </Box>
-        </Box>
-        <Box sx={{ display: "flex", justifyContent: "center" }}>
           <Typography fontSize={"0.75rem"}>
-            {topGuess.score === 0
-              ? "(יאללה להתחיל לנחש)"
-              : topGuess.rank > 0
-              ? `${topGuess.rank} / 1000`
-              : `(לא מתקרבים פה אפילו)`}
+            {topGuess.score === 0 ? (
+              "(יאללה להתחיל לנחש)"
+            ) : topGuess.rank < 0 ? (
+              `(לא מתקרבים פה אפילו)`
+            ) : (
+              <Box sx={{ display: "flex", justifyContent: "center" }}>
+                <Box sx={{ width: "8rem" }}>
+                  <Rank rank={topGuess.rank}></Rank>
+                </Box>
+              </Box>
+            )}
           </Typography>
         </Box>
       </CardContent>

@@ -11,6 +11,7 @@ import TableCell from "@mui/material/TableCell";
 import TableBody from "@mui/material/TableBody";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
+import PersonIcon from "@mui/icons-material/Person";
 
 interface GuessesProps {
   room: Room;
@@ -54,10 +55,14 @@ const Guesses: FC<GuessesProps> = ({ room, isUserTeamInRoom }) => {
           >
             <TableHead>
               <TableRow sx={{ "& th": { border: 0 } }}>
-                <TableCell align="center"></TableCell>
                 <TableCell align="center">מתחמם</TableCell>
                 <TableCell align="center">ניחוש</TableCell>
                 <TableCell align="center">קרבה</TableCell>
+                <TableCell align="center" sx={{ padding: 1 }}>
+                  <Box sx={{ display: "flex", justifyContent: "center" }}>
+                    <PersonIcon color="action" />
+                  </Box>
+                </TableCell>
                 <TableCell align="center">#</TableCell>
               </TableRow>
             </TableHead>
