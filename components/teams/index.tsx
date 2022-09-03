@@ -5,6 +5,7 @@ import useTeam from "../../hooks/useTeam";
 import useUser from "../../hooks/useUser";
 import { Room } from "../../models";
 import TeamComponent from "../teamComponent";
+import TeamComponentAlt from "../teamComponentAlt";
 
 interface Props {
   room: Room;
@@ -36,7 +37,8 @@ const Teams: FC<Props> = ({ room, isUserTeamInRoom }) => {
       <Box
         sx={{
           display: { xs: "-webkit-box", sm: "flex" },
-          pb: "2rem",
+          py: "1rem",
+          paddingInline: "1rem",
           gap: 1,
           maxWidth: { xs: 350, sm: 600, md: 900, lg: 1100 },
           scrollSnapType: "x mandatory",

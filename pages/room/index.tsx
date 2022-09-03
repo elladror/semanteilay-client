@@ -9,6 +9,9 @@ import Button from "@mui/material/Button";
 import Avatar from "@mui/material/Avatar";
 import theme from "../../src/theme";
 import useUser from "../../hooks/useUser";
+import MakeGuess from "../../components/makeGuess";
+import { useGuesses } from "../../hooks/useGuesses";
+import Box from "@mui/material/Box";
 
 const Room: FC = () => {
   const router = useRouter();
@@ -22,6 +25,8 @@ const Room: FC = () => {
       isLoading || isError ? false : room.teams.map(({ id }) => id).includes(user.teamId ?? ""),
     [isLoading, isError, room?.teams, user.teamId]
   );
+
+  const { guesses, addGuess } = useGuesses({ isUserTeamInRoom });
 
   if (isLoading || isError) return <h1></h1>;
   // TODO: add proper handling
@@ -50,8 +55,35 @@ const Room: FC = () => {
           {room.name} With <span data-hover={participantCount}>{participantCount}</span> Players
         </span>
       </Typography>
-      <Teams room={room} isUserTeamInRoom={isUserTeamInRoom} />
-      <Guesses room={room} isUserTeamInRoom={isUserTeamInRoom} />
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          top: 0,
+          position: "sticky",
+          zIndex: 10,
+          backgroundColor: "white",
+          width: "100%",
+        }}
+      >
+        <Teams room={room} isUserTeamInRoom={isUserTeamInRoom} />
+        <MakeGuess
+          handleGuess={async (word: string) => {
+            try {
+              addGuess({
+                word,
+                ownerId: user.id,
+                teamId: user.teamId as string,
+                roomId: room.id,
+              });
+            } catch (err) {
+              console.log("Don't know that word"); // TODO: implement don't know the word
+            }
+          }}
+        />
+      </Box>
+      <Guesses guesses={guesses} isUserTeamInRoom={isUserTeamInRoom} />
     </>
   );
 };

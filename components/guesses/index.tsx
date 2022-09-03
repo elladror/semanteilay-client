@@ -1,9 +1,4 @@
 import { FC } from "react";
-import MakeGuess from "../makeGuess";
-import { useGuesses } from "../../hooks/useGuesses";
-import useUser from "../../hooks/useUser";
-import Guess from "../guess";
-import { Room } from "../../models";
 import Table from "@mui/material/Table";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
@@ -12,40 +7,22 @@ import TableBody from "@mui/material/TableBody";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import PersonIcon from "@mui/icons-material/Person";
+import { Guess } from "../../models";
+import GuessComponent from "../guess";
+import { TableContainer } from "@mui/material";
 
 interface GuessesProps {
-  room: Room;
+  guesses: Guess[];
   isUserTeamInRoom: boolean;
 }
 
-const Guesses: FC<GuessesProps> = ({ room, isUserTeamInRoom }) => {
-  const { user } = useUser();
-
-  const { guesses, addGuess, isLoading, isError } = useGuesses({
-    isUserTeamInRoom,
-  });
-
-  if (isError) return <h1>hi</h1>;
-
+const Guesses: FC<GuessesProps> = ({ guesses, isUserTeamInRoom }) => {
   return (
     <>
       {isUserTeamInRoom ? (
-        <>
-          <MakeGuess
-            handleGuess={async (word: string) => {
-              try {
-                addGuess({
-                  word,
-                  ownerId: user.id,
-                  teamId: user.teamId as string,
-                  roomId: room.id,
-                });
-              } catch (err) {
-                console.log("Don't know that word"); // TODO: implement don't know the word
-              }
-            }}
-          />
+        <TableContainer sx={{ maxHeight: "25rem", display: "flex", justifyContent: "center" }}>
           <Table
+            stickyHeader
             sx={{
               maxWidth: 600,
               minWidth: 300,
@@ -68,18 +45,14 @@ const Guesses: FC<GuessesProps> = ({ room, isUserTeamInRoom }) => {
             </TableHead>
             <TableBody>
               {guesses.map((guess) => (
-                <Guess key={guess.id} guess={guess} />
+                <GuessComponent key={guess.id} guess={guess} />
               ))}
             </TableBody>
-          </Table>{" "}
-        </>
+          </Table>
+        </TableContainer>
       ) : (
         <Box sx={{ textAlign: "center", mt: 20 }}>
-          {room.teams.length === 0 ? (
-            <></>
-          ) : (
-            <Typography variant="h4">Join or create a team to play!</Typography>
-          )}
+          <Typography variant="h4">Join or create a team to play!</Typography>
         </Box>
       )}
     </>

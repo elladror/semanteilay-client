@@ -26,14 +26,6 @@ main {
   align-items: center;
 }
 
-form {
-  margin: 4rem 0;
-  line-height: 1.5;
-  font-size: 2rem;
-  display: flex;
-  text-align: center;
-}
-
 @keyframes go {
   100% {
     transform: rotateX(90deg) translateY(-22px);
