@@ -31,7 +31,6 @@ const Guesses: FC<GuessesProps> = ({ room, isUserTeamInRoom }) => {
       {isUserTeamInRoom ? (
         <>
           <MakeGuess
-            disable={!isUserTeamInRoom}
             handleGuess={async (word: string) => {
               try {
                 addGuess({

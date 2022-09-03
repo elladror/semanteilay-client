@@ -1,25 +1,29 @@
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
-import { FC, FormEventHandler } from "react";
+import { FC, FormEventHandler, useRef } from "react";
 import { useInput } from "../../hooks/useInput";
 
 interface Props {
   handleGuess: (guess: string) => void;
-  disable: boolean;
 }
 
-const MakeGuess: FC<Props> = ({ handleGuess: handleCreate, disable }) => {
-  const { value: roomToAdd, bind, reset } = useInput("");
+const MakeGuess: FC<Props> = ({ handleGuess }) => {
+  const { value: word, bind, reset } = useInput("");
+  const input = useRef<HTMLInputElement>();
 
   const handleSubmit: FormEventHandler<HTMLFormElement> = (event) => {
     event.preventDefault();
-    handleCreate(roomToAdd);
+
+    const guess = word.trim();
+    if (guess) handleGuess(guess);
     reset();
+    input.current?.focus();
   };
 
   return (
     <form onSubmit={handleSubmit}>
       <TextField
+        inputRef={input}
         variant="outlined"
         {...bind}
         label="make your guess"
@@ -29,7 +33,6 @@ const MakeGuess: FC<Props> = ({ handleGuess: handleCreate, disable }) => {
         InputProps={{ sx: { borderTopRightRadius: 0, borderBottomRightRadius: 0 } }}
       />
       <Button
-        disabled={disable}
         variant="contained"
         type="submit"
         sx={{ width: "15ch", borderTopLeftRadius: 0, borderBottomLeftRadius: 0 }}
