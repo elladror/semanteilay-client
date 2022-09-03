@@ -33,7 +33,7 @@ const Rank: FC<RankProps> = ({ rank }) => {
           alignContent={"center"}
           variant="caption"
           component="div"
-          color="#f8ebeb"
+          color={rank > 450 ? "#f8ebeb" : "#373434"}
           sx={{ lineHeight: 0 }}
         >{`${rank} / 1000`}</Typography>
       </Box>
