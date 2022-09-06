@@ -1,3 +1,4 @@
+import { Grid } from "@mui/material";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import { FC, FormEventHandler, useContext, useEffect } from "react";
@@ -33,12 +34,14 @@ const CreateRoom: FC = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <TextField variant="standard" {...bind} label="room name" sx={{ margin: 1 }} />
-      <Button type="submit" sx={{ width: "20ch" }}>
-        <b>Create Room</b>
-      </Button>
-    </form>
+    <Grid container sx={{ textAlign: "center" }}>
+      <form onSubmit={handleSubmit}>
+        <TextField variant="standard" {...bind} label="room name" sx={{ margin: 1 }} />
+        <Button type="submit" sx={{ width: "20ch" }}>
+          <b>Create Room</b>
+        </Button>
+      </form>
+    </Grid>
   );
 };
 
