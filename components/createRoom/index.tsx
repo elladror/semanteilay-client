@@ -1,6 +1,6 @@
-import { Grid } from "@mui/material";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
+import { Box } from "@mui/system";
 import { FC, FormEventHandler, useContext, useEffect } from "react";
 import { createRoom } from "../../api/roomsApi";
 import { SocketContext } from "../../context/socket";
@@ -34,14 +34,14 @@ const CreateRoom: FC = () => {
   };
 
   return (
-    <Grid container sx={{ textAlign: "center" }}>
+    <Box sx={{ textAlign: "center" }}>
       <form onSubmit={handleSubmit}>
         <TextField variant="standard" {...bind} label="room name" sx={{ margin: 1 }} />
         <Button type="submit" sx={{ width: "20ch" }}>
           <b>Create Room</b>
         </Button>
       </form>
-    </Grid>
+    </Box>
   );
 };
 
