@@ -9,6 +9,7 @@ import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import Alert from "@mui/material/Alert";
 import AlertTitle from "@mui/material/AlertTitle";
+import { Box } from "@mui/material";
 
 const Login: FC = () => {
   const [lastNickname, setLastNickname] = useLocalStorage("last-nickname", "");
@@ -51,12 +52,14 @@ const Login: FC = () => {
   return (
     <main>
       <Title>This shit</Title>
-      <form onSubmit={handleSubmit}>
-        <TextField {...bindInput} label="nickname" sx={{ margin: 1 }} />
-        <Button type="submit" sx={{ width: "15ch" }}>
-          <b>Play</b>
-        </Button>
-      </form>
+      <Box sx={{ textAlign: "center" }}>
+        <form onSubmit={handleSubmit}>
+          <TextField {...bindInput} label="nickname" sx={{ margin: 1 }} />
+          <Button type="submit" sx={{ width: "15ch" }}>
+            <b>Play</b>
+          </Button>
+        </form>
+      </Box>
       {warning && (
         <Alert severity="warning">
           <AlertTitle>Try a different name</AlertTitle>
