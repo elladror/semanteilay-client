@@ -24,6 +24,7 @@ const Guesses: FC<GuessesProps> = ({ guesses, isUserTeamInRoom }) => {
           <Table
             stickyHeader
             sx={{
+              height: "fit-content",
               maxWidth: 600,
               minWidth: 300,
               "& .MuiTableCell-head": { fontWeight: "bold" },
