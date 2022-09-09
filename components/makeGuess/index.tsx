@@ -42,7 +42,7 @@ const MakeGuess: FC<Props> = ({ handleGuess, relate, isUserTeamInRoom }) => {
         >
           <Box
             sx={{
-              marginTop: "3rem",
+              marginTop: { sm: "3rem", xs: "1rem" },
               marginBottom: "1.5rem",
               fontSize: "2rem",
               display: "flex",

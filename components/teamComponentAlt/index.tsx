@@ -14,7 +14,7 @@ const TeamComponentAlt: FC<Props> = ({ team }) => {
   const { name, topGuess } = team;
 
   return (
-    <Card raised={true} sx={{ width: "8rem", p: 1.5 }}>
+    <Card raised={true} sx={{ width: "8rem", p: 1.5, pb: 0.75 }}>
       <Typography
         fontWeight="500"
         variant="body1"
@@ -22,7 +22,7 @@ const TeamComponentAlt: FC<Props> = ({ team }) => {
           textOverflow: "ellipsis",
           overflow: "hidden",
           whiteSpace: "nowrap",
-          pb: "0.5rem",
+          pb: "0.25rem",
         }}
       >
         {name}
@@ -34,7 +34,7 @@ const TeamComponentAlt: FC<Props> = ({ team }) => {
           lineHeight: 0,
           alignContent: "center",
           alignItems: "center",
-          height: "2.5rem",
+          height: "2rem",
         }}
       >
         {topGuess.rank < 0 ? (
@@ -45,9 +45,9 @@ const TeamComponentAlt: FC<Props> = ({ team }) => {
           ) : (
             <Avatar
               sx={{
-                width: "2.5rem",
-                height: "2.5rem",
-                fontSize: "0.8rem",
+                width: "2rem",
+                height: "2rem",
+                fontSize: "0.62rem",
               }}
             >
               {topGuess.score}
