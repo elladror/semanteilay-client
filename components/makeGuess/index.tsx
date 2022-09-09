@@ -1,14 +1,15 @@
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
-import { FC, FormEventHandler, useRef } from "react";
+import { Dispatch, FC, FormEventHandler, SetStateAction, useRef } from "react";
 import { useInput } from "../../hooks/useInput";
 
 interface Props {
   handleGuess: (guess: string) => void;
+  relate: Dispatch<SetStateAction<boolean>>;
 }
 
-const MakeGuess: FC<Props> = ({ handleGuess }) => {
+const MakeGuess: FC<Props> = ({ handleGuess, relate }) => {
   const { value: word, bind, reset } = useInput("");
   const input = useRef<HTMLInputElement>();
 
@@ -33,6 +34,13 @@ const MakeGuess: FC<Props> = ({ handleGuess }) => {
         }}
       >
         <TextField
+          onFocus={() => {
+            relate(true);
+            setTimeout(() => {
+              document.getElementById("teams")?.scrollIntoView(true);
+            }, 0);
+          }}
+          onBlur={() => relate(false)}
           inputRef={input}
           variant="outlined"
           {...bind}

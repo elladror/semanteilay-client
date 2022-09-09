@@ -10,9 +10,10 @@ import TeamComponentAlt from "../teamComponentAlt";
 interface Props {
   room: Room;
   isUserTeamInRoom: boolean;
+  isGuessing: boolean;
 }
 
-const Teams: FC<Props> = ({ room, isUserTeamInRoom }) => {
+const Teams: FC<Props> = ({ room, isUserTeamInRoom, isGuessing }) => {
   const { switchTeam, leaveTeam, createTeam } = useTeam(room);
   const { user } = useUser();
   const [isLoading, setLoading] = useState(false);
@@ -35,6 +36,7 @@ const Teams: FC<Props> = ({ room, isUserTeamInRoom }) => {
   return (
     <>
       <Box
+        id={"teams"}
         sx={{
           display: { xs: "-webkit-box", sm: "flex" },
           py: "1rem",
@@ -54,16 +56,27 @@ const Teams: FC<Props> = ({ room, isUserTeamInRoom }) => {
           },
         }}
       >
-        {room.teams.map((team) => (
-          <TeamComponent
-            key={team.id}
-            team={team}
-            disabled={isLoading}
-            joinTeam={joinTeamHandler(team.id)}
-            leaveTeam={leaveTeamHandler}
-            currentUser={user}
-          ></TeamComponent>
-        ))}
+        {room.teams.map((team) =>
+          isGuessing ? (
+            <TeamComponentAlt
+              key={team.id}
+              team={team}
+              disabled={isLoading}
+              joinTeam={joinTeamHandler(team.id)}
+              leaveTeam={leaveTeamHandler}
+              currentUser={user}
+            ></TeamComponentAlt>
+          ) : (
+            <TeamComponent
+              key={team.id}
+              team={team}
+              disabled={isLoading}
+              joinTeam={joinTeamHandler(team.id)}
+              leaveTeam={leaveTeamHandler}
+              currentUser={user}
+            ></TeamComponent>
+          )
+        )}
       </Box>
       {isUserTeamInRoom ? (
         <></>

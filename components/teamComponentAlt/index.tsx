@@ -51,7 +51,7 @@ const TeamComponentAlt: FC<Props> = ({ team, joinTeam, currentUser, disabled, le
         </Box> */}
       <Box sx={{ display: "flex", justifyContent: "center", lineHeight: 0 }}>
         {topGuess.rank < 0 ? (
-          <Typography fontSize={"0.75rem"}>
+          <Typography fontSize={"0.75rem"} textOverflow={"ellipsis"} noWrap={true}>
             {" "}
             {topGuess.score === 0 ? "(יאללה להתחיל לנחש)" : `(לא מתקרבים פה אפילו)`}
           </Typography>
