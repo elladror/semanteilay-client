@@ -7,6 +7,7 @@ import CreateRoom from "../components/createRoom";
 import { GET_ALL_ROOMS_URL as url } from "../api/roomsApi";
 import { fetcher } from "../api/api";
 import useSWR from "swr";
+import Script from "next/script";
 
 const Lobby: NextPage = () => {
   const socket = useContext(SocketContext);
@@ -28,6 +29,19 @@ const Lobby: NextPage = () => {
 
   return (
     <main>
+      <Script
+        src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"
+        strategy="afterInteractive"
+      />
+      <Script id="google-analytics" strategy="afterInteractive">
+        {`
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){window.dataLayer.push(arguments);}
+          gtag('js', new Date());
+
+          gtag('config', 'GA_MEASUREMENT_ID');
+        `}
+      </Script>
       <Title>Lobby</Title>
       <CreateRoom />
       <Rooms rooms={rooms} />
