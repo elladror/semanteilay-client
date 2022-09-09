@@ -1,14 +1,10 @@
-import * as React from "react";
 import Document, { Html, Head, Main, NextScript } from "next/document";
 import createEmotionServer from "@emotion/server/create-instance";
 import theme from "../src/theme";
 import createEmotionCache from "../src/createEmotionCache";
-import ReactGA from "react-ga";
 
 export default class MyDocument extends Document {
   render() {
-    ReactGA.initialize("G-4S57ZE48X1");
-
     return (
       <Html lang="en">
         <Head>

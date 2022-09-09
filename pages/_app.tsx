@@ -9,6 +9,7 @@ import { SocketContext, socket } from "../context/socket";
 import Head from "next/head";
 import Layout from "../components/layout";
 import { UserProvider } from "../context/userProvider";
+import Script from "next/script";
 
 // Client-side cache, shared for the whole session of the user in the browser.
 const clientSideEmotionCache = createEmotionCache();
@@ -31,6 +32,19 @@ function MyApp(props: MyAppProps) {
         />
         <link rel="icon" href="/favicon.ico" />
       </Head>
+      <Script
+        src="https://www.googletagmanager.com/gtag/js?id=G-4S57ZE48X1"
+        strategy="afterInteractive"
+      />
+      <Script id="google-analytics" strategy="afterInteractive">
+        {`
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){window.dataLayer.push(arguments);}
+          gtag('js', new Date());
+
+          gtag('config', 'G-4S57ZE48X1');
+        `}
+      </Script>
       <SocketContext.Provider value={socket}>
         <UserProvider>
           <ThemeProvider theme={theme}>
