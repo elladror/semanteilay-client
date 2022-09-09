@@ -31,7 +31,9 @@ const MakeGuess: FC<Props> = ({ handleGuess, relate, isUserTeamInRoom }) => {
           onFocus={() => {
             relate(true);
             setTimeout(() => {
-              document.getElementById("teams")?.scrollIntoView(true);
+              document
+                .getElementById("teams")
+                ?.scrollIntoView({ block: "start", inline: "nearest", behavior: "smooth" });
             }, 0);
           }}
           onBlur={() => {
