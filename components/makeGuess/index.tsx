@@ -7,9 +7,10 @@ import { useInput } from "../../hooks/useInput";
 interface Props {
   handleGuess: (guess: string) => void;
   relate: Dispatch<SetStateAction<boolean>>;
+  isUserTeamInRoom: boolean;
 }
 
-const MakeGuess: FC<Props> = ({ handleGuess, relate }) => {
+const MakeGuess: FC<Props> = ({ handleGuess, relate, isUserTeamInRoom }) => {
   const { value: word, bind, reset } = useInput("");
   const input = useRef<HTMLInputElement>();
 
@@ -23,42 +24,50 @@ const MakeGuess: FC<Props> = ({ handleGuess, relate }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <Box
-        sx={{
-          marginTop: "3rem",
-          marginBottom: "1.5rem",
-          fontSize: "2rem",
-          display: "flex",
-          textAlign: "center",
-        }}
-      >
-        <TextField
+    <>
+      {isUserTeamInRoom && (
+        <form
+          onSubmit={handleSubmit}
           onFocus={() => {
             relate(true);
             setTimeout(() => {
               document.getElementById("teams")?.scrollIntoView(true);
             }, 0);
           }}
-          onBlur={() => relate(false)}
-          inputRef={input}
-          variant="outlined"
-          {...bind}
-          label="make your guess"
-          sx={{ direction: "rtl" }}
-          autoComplete="off"
-          type={"search"}
-          InputProps={{ sx: { borderTopRightRadius: 0, borderBottomRightRadius: 0 } }}
-        />
-        <Button
-          variant="contained"
-          type="submit"
-          sx={{ width: "15ch", borderTopLeftRadius: 0, borderBottomLeftRadius: 0 }}
+          onBlur={() => {
+            relate(false);
+          }}
         >
-          <b>guess</b>
-        </Button>
-      </Box>
-    </form>
+          <Box
+            sx={{
+              marginTop: "3rem",
+              marginBottom: "1.5rem",
+              fontSize: "2rem",
+              display: "flex",
+              textAlign: "center",
+            }}
+          >
+            <TextField
+              inputRef={input}
+              variant="outlined"
+              {...bind}
+              label="make your guess"
+              sx={{ direction: "rtl" }}
+              autoComplete="off"
+              type={"search"}
+              InputProps={{ sx: { borderTopRightRadius: 0, borderBottomRightRadius: 0 } }}
+            />
+            <Button
+              variant="contained"
+              type="submit"
+              sx={{ width: "15ch", borderTopLeftRadius: 0, borderBottomLeftRadius: 0 }}
+            >
+              <b>guess</b>
+            </Button>
+          </Box>
+        </form>
+      )}
+    </>
   );
 };
 

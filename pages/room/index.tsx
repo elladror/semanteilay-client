@@ -65,15 +65,11 @@ const Room: FC = () => {
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
-          top: 0,
-          position: "sticky",
-          zIndex: 10,
-          backgroundColor: "white",
-          width: "100%",
         }}
       >
         <Teams room={room} isUserTeamInRoom={isUserTeamInRoom} isGuessing={isGuessing} />
         <MakeGuess
+          isUserTeamInRoom={isUserTeamInRoom}
           relate={setGuessing}
           handleGuess={async (word: string) => {
             try {
