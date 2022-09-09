@@ -19,7 +19,8 @@ const useTeam = (room: Room) => {
   const switchTeam = useCallback(
     async (newTeamId: string) => {
       if (user.teamId !== newTeamId) {
-        await leaveTeamRequest({ userId: user.id, teamId: newTeamId, roomId: room.id });
+        if (user.teamId)
+          await leaveTeamRequest({ userId: user.id, teamId: user.teamId, roomId: room.id });
         await joinTeam({ userId: user.id, teamId: newTeamId, roomId: room.id });
         changeTeam(newTeamId, user.teamId);
       }
