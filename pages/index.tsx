@@ -30,7 +30,7 @@ const Lobby: NextPage = () => {
   return (
     <main>
       <Script
-        src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"
+        src="https://www.googletagmanager.com/gtag/js?id=G-4S57ZE48X1"
         strategy="afterInteractive"
       />
       <Script id="google-analytics" strategy="afterInteractive">
@@ -39,7 +39,7 @@ const Lobby: NextPage = () => {
           function gtag(){window.dataLayer.push(arguments);}
           gtag('js', new Date());
 
-          gtag('config', 'GA_MEASUREMENT_ID');
+          gtag('config', 'G-4S57ZE48X1');
         `}
       </Script>
       <Title>Lobby</Title>
