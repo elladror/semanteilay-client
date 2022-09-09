@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import { FC, useMemo } from "react";
+import { FC, useEffect, useMemo, useState } from "react";
 import { useRoom } from "../../hooks/useRoom";
 import Guesses from "../../components/guesses";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
@@ -19,6 +19,7 @@ const Room: FC = () => {
     router.query.id as string
   );
   const { user } = useUser();
+  const [isGuessing, setGuessing] = useState(false);
 
   const isUserTeamInRoom = useMemo(
     () =>
@@ -27,6 +28,10 @@ const Room: FC = () => {
   );
 
   const { guesses, addGuess } = useGuesses({ isUserTeamInRoom });
+
+  useEffect(() => {
+    if (isUserTeamInRoom) window.location.href = "#teams";
+  }, [isUserTeamInRoom]);
 
   if (isLoading || isError) return <h1></h1>;
   // TODO: add proper handling
@@ -60,15 +65,12 @@ const Room: FC = () => {
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
-          top: 0,
-          position: "sticky",
-          zIndex: 10,
-          backgroundColor: "white",
-          width: "100%",
         }}
       >
-        <Teams room={room} isUserTeamInRoom={isUserTeamInRoom} />
+        <Teams room={room} isUserTeamInRoom={isUserTeamInRoom} isGuessing={isGuessing} />
         <MakeGuess
+          isUserTeamInRoom={isUserTeamInRoom}
+          relate={setGuessing}
           handleGuess={async (word: string) => {
             try {
               addGuess({

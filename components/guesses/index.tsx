@@ -20,10 +20,11 @@ const Guesses: FC<GuessesProps> = ({ guesses, isUserTeamInRoom }) => {
   return (
     <>
       {isUserTeamInRoom ? (
-        <TableContainer sx={{ maxHeight: "25rem", display: "flex", justifyContent: "center" }}>
+        <TableContainer sx={{ height: "45rem", display: "flex", justifyContent: "center" }}>
           <Table
             stickyHeader
             sx={{
+              height: "fit-content",
               maxWidth: 600,
               minWidth: 300,
               "& .MuiTableCell-head": { fontWeight: "bold" },

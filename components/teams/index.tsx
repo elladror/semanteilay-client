@@ -6,16 +6,21 @@ import useUser from "../../hooks/useUser";
 import { Room } from "../../models";
 import TeamComponent from "../teamComponent";
 import TeamComponentAlt from "../teamComponentAlt";
+import useMediaQuery from "@mui/material/useMediaQuery";
+import { useTheme } from "@mui/material/styles";
 
 interface Props {
   room: Room;
   isUserTeamInRoom: boolean;
+  isGuessing: boolean;
 }
 
-const Teams: FC<Props> = ({ room, isUserTeamInRoom }) => {
+const Teams: FC<Props> = ({ room, isUserTeamInRoom, isGuessing }) => {
   const { switchTeam, leaveTeam, createTeam } = useTeam(room);
   const { user } = useUser();
   const [isLoading, setLoading] = useState(false);
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
   const joinTeamHandler = useCallback(
     (teamId: string) => async () => {
@@ -35,11 +40,12 @@ const Teams: FC<Props> = ({ room, isUserTeamInRoom }) => {
   return (
     <>
       <Box
+        id={"teams"}
         sx={{
           display: { xs: "-webkit-box", sm: "flex" },
           py: "1rem",
           paddingInline: "1rem",
-          gap: 1,
+          gap: 2,
           maxWidth: { xs: 350, sm: 600, md: 900, lg: 1100 },
           scrollSnapType: "x mandatory",
           "& > *": {
@@ -54,16 +60,20 @@ const Teams: FC<Props> = ({ room, isUserTeamInRoom }) => {
           },
         }}
       >
-        {room.teams.map((team) => (
-          <TeamComponent
-            key={team.id}
-            team={team}
-            disabled={isLoading}
-            joinTeam={joinTeamHandler(team.id)}
-            leaveTeam={leaveTeamHandler}
-            currentUser={user}
-          ></TeamComponent>
-        ))}
+        {room.teams.map((team) =>
+          isGuessing && isMobile ? (
+            <TeamComponentAlt key={team.id} team={team}></TeamComponentAlt>
+          ) : (
+            <TeamComponent
+              key={team.id}
+              team={team}
+              disabled={isLoading}
+              joinTeam={joinTeamHandler(team.id)}
+              leaveTeam={leaveTeamHandler}
+              currentUser={user}
+            ></TeamComponent>
+          )
+        )}
       </Box>
       {isUserTeamInRoom ? (
         <></>
