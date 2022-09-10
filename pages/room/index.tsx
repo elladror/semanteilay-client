@@ -21,11 +21,8 @@ const Room: FC = () => {
   const { user } = useUser();
   const [isGuessing, setGuessing] = useState(false);
 
-  const isUserTeamInRoom = useMemo(
-    () =>
-      isLoading || isError ? false : room.teams.map(({ id }) => id).includes(user.teamId ?? ""),
-    [isLoading, isError, room?.teams, user.teamId]
-  );
+  const isUserTeamInRoom =
+    isLoading || isError ? false : room.teams.map(({ id }) => id).includes(user.teamId ?? "");
 
   const { guesses, addGuess } = useGuesses({ isUserTeamInRoom, roomId: room?.id });
 
@@ -33,7 +30,7 @@ const Room: FC = () => {
     if (isUserTeamInRoom) window.location.href = "#teams";
   }, [isUserTeamInRoom]);
 
-  if (isLoading || isError) return <h1></h1>;
+  if (isLoading || isError) return <h1>a</h1>;
   // TODO: add proper handling
 
   return (
@@ -60,6 +57,7 @@ const Room: FC = () => {
           {room.name} With <span data-hover={participantCount}>{participantCount}</span> Players
         </span>
       </Typography>
+      <Teams room={room} isUserTeamInRoom={isUserTeamInRoom} isGuessing={isGuessing} />
       <Box
         sx={{
           display: "flex",
@@ -67,7 +65,6 @@ const Room: FC = () => {
           alignItems: "center",
         }}
       >
-        <Teams room={room} isUserTeamInRoom={isUserTeamInRoom} isGuessing={isGuessing} />
         <MakeGuess
           isUserTeamInRoom={isUserTeamInRoom}
           relate={setGuessing}

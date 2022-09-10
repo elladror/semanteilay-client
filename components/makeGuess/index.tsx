@@ -34,7 +34,7 @@ const MakeGuess: FC<Props> = ({ handleGuess, relate, isUserTeamInRoom }) => {
               document
                 .getElementById("teams")
                 ?.scrollIntoView({ block: "start", inline: "nearest", behavior: "smooth" });
-            }, 0);
+            }, 200);
           }}
           onBlur={() => {
             relate(false);

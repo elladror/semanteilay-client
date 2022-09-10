@@ -46,6 +46,10 @@ const Teams: FC<Props> = ({ room, isUserTeamInRoom, isGuessing }) => {
           py: "1rem",
           paddingInline: "1rem",
           gap: 2,
+          position: "sticky",
+          top: 0,
+          backgroundColor: "white",
+          zIndex: 10,
           maxWidth: { xs: 350, sm: 600, md: 900, lg: 1100 },
           scrollSnapType: "x mandatory",
           "& > *": {
