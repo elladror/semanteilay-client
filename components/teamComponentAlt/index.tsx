@@ -1,20 +1,22 @@
+import { CardContent } from "@mui/material";
 import Avatar from "@mui/material/Avatar";
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import Typography from "@mui/material/Typography";
 import { FC } from "react";
-import { Team, User } from "../../models";
+import { Team } from "../../models";
 import Rank from "../rank";
 
 interface Props {
   team: Team;
+  show: boolean;
 }
 
-const TeamComponentAlt: FC<Props> = ({ team }) => {
+const TeamComponentAlt: FC<Props> = ({ team, show }) => {
   const { name, topGuess } = team;
 
   return (
-    <Card raised={true} sx={{ width: "8rem", p: 1.5, pb: 0.75 }}>
+    <Card raised={true} sx={show ? { width: "8rem", p: 1.5, pb: 0.75 } : { display: "none" }}>
       <Typography
         fontWeight="500"
         variant="body1"
