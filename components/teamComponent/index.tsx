@@ -16,14 +16,15 @@ interface Props {
   currentUser: User;
   disabled: boolean;
   leaveTeam: () => void;
+  show: boolean;
 }
 
-const TeamComponent: FC<Props> = ({ team, joinTeam, currentUser, disabled, leaveTeam }) => {
+const TeamComponent: FC<Props> = ({ team, joinTeam, currentUser, disabled, leaveTeam, show }) => {
   const isCurrentTeam = currentUser.teamId === team.id;
   const { name, topGuess, _count } = team;
 
   return (
-    <Card raised={true} sx={{ width: "12.5rem" }}>
+    <Card raised={true} hidden={!show} sx={{ width: "12.5rem" }}>
       <CardContent>
         <Box sx={{ display: "flex", justifyContent: "space-between", pb: "1rem" }}>
           <Typography
@@ -51,7 +52,7 @@ const TeamComponent: FC<Props> = ({ team, joinTeam, currentUser, disabled, leave
             {topGuess.score}
           </Avatar>
         </Box>
-        <Box sx={{ display: "flex", justifyContent: "center" }}>
+        <Box sx={{ display: "flex", justifyContent: "center", height: "1rem" }}>
           {topGuess.rank < 0 ? (
             <Typography fontSize={"0.75rem"}>
               {" "}
