@@ -14,7 +14,7 @@ export type Team = {
     score: number;
     rank: number;
   };
-  _count?: {
+  _count: {
     members: number;
     guesses: number;
   };

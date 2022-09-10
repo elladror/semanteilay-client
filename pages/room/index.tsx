@@ -27,7 +27,7 @@ const Room: FC = () => {
     [isLoading, isError, room?.teams, user.teamId]
   );
 
-  const { guesses, addGuess } = useGuesses({ isUserTeamInRoom });
+  const { guesses, addGuess } = useGuesses({ isUserTeamInRoom, roomId: room?.id });
 
   useEffect(() => {
     if (isUserTeamInRoom) window.location.href = "#teams";
