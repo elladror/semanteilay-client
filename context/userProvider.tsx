@@ -3,7 +3,8 @@ import { User } from "../models";
 import { SocketContext } from "../context/socket";
 import { useRouter } from "next/router";
 import { useLocalStorage } from "usehooks-ts";
-import { joinRoom, login, setIdle } from "../api/userApi";
+import { joinRoom as joinRoomRequest, login, setIdle } from "../api/userApi";
+import { ApiError } from "next/dist/server/api-utils";
 
 export type UserContextType = {
   user: User;
@@ -28,6 +29,23 @@ export const UserProvider: FC<Props> = ({ children }) => {
   const [isLoading, setLoading] = useState(false);
   const [isReady, setReady] = useState(false);
 
+  const goToLobby = useCallback(() => {
+    router.push("/");
+  }, [router]);
+
+  const joinRoom = useCallback(
+    async (roomId: string, user: User) => {
+      if (user.roomId !== roomId) {
+        await joinRoomRequest({ userId: user.id, roomId, socketId: socket.id });
+        setUser({ ...user, roomId });
+      }
+
+      socket.emit("joinRoom", roomId);
+      if (user.teamId) socket.emit("switchTeam", { newTeamId: user.teamId });
+    },
+    [socket]
+  );
+
   const socketConnectHandler = useCallback(
     async (id?: string) => {
       setLoading(true);
@@ -43,18 +61,42 @@ export const UserProvider: FC<Props> = ({ children }) => {
           setUser(loggedInUser);
           const { roomId } = loggedInUser;
 
-          if (router.pathname === "/room" && queryRoomId !== undefined && queryRoomId !== roomId) {
-            await joinRoom({ userId, roomId: queryRoomId, socketId: socket.id });
-            setUser({ ...loggedInUser, roomId: queryRoomId });
-            socket.emit("joinRoom", queryRoomId);
-            socket.emit("switchTeam", { newTeamId: loggedInUser.teamId });
-            router.push({ pathname: "/room", query: { id: queryRoomId } });
-          } else if (roomId) {
-            socket.emit("joinRoom", roomId);
-            socket.emit("switchTeam", { newTeamId: loggedInUser.teamId });
-            router.push({ pathname: "/room", query: { id: roomId } });
+          if (!roomId) {
+            if (router.pathname === "/room" && queryRoomId !== undefined) {
+              // has no existing room, url to room -> join and let navigate to room
+              try {
+                await joinRoom(queryRoomId, loggedInUser);
+                setLoading(false);
+              } catch (e) {
+                // room in url doesn't exist
+
+                if ((e as ApiError).statusCode === 404) {
+                  goToLobby();
+                } else {
+                  throw e;
+                }
+              }
+            } else {
+              // no existing room or url room
+
+              goToLobby();
+            }
+          } else if (router.pathname === "/room" && queryRoomId !== undefined) {
+            if (roomId === queryRoomId) {
+              // existing room is the room in url
+
+              await joinRoom(queryRoomId, loggedInUser);
+              setLoading(false);
+            } else {
+              // existing room different than one in url
+
+              goToLobby();
+            }
           } else {
-            router.push("/");
+            // didnt  have room in url but has existing room
+
+            await joinRoom(roomId, loggedInUser);
+            router.push({ pathname: "/room", query: { id: roomId } });
           }
         } catch (error) {
           setUserId("");
@@ -68,7 +110,7 @@ export const UserProvider: FC<Props> = ({ children }) => {
         console.log("router is not ready");
       }
     },
-    [router, setUserId, socket, userId, isReady]
+    [isReady, socket.connected, socket.id, router, userId, joinRoom, goToLobby, setUserId]
   );
 
   useEffect(() => {
