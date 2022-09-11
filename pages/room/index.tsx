@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import { FC, useEffect, useMemo, useState } from "react";
+import { FC, useState } from "react";
 import { useRoom } from "../../hooks/useRoom";
 import Guesses from "../../components/guesses";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
