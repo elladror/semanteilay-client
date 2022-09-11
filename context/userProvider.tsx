@@ -39,6 +39,7 @@ export const UserProvider: FC<Props> = ({ children }) => {
         await joinRoomRequest({ userId: user.id, roomId, socketId: socket.id });
         setUser({ ...user, roomId });
       }
+
       socket.emit("joinRoom", roomId);
       if (user.teamId) socket.emit("switchTeam", { newTeamId: user.teamId });
     },
@@ -65,11 +66,15 @@ export const UserProvider: FC<Props> = ({ children }) => {
               // has no existing room, url to room -> join and let navigate to room
               try {
                 await joinRoom(queryRoomId, loggedInUser);
+                setLoading(false);
               } catch (e) {
                 // room in url doesn't exist
-                if ((e as ApiError).statusCode === 404) goToLobby();
 
-                throw e;
+                if ((e as ApiError).statusCode === 404) {
+                  goToLobby();
+                } else {
+                  throw e;
+                }
               }
             } else {
               // no existing room or url room
@@ -81,6 +86,7 @@ export const UserProvider: FC<Props> = ({ children }) => {
               // existing room is the room in url
 
               await joinRoom(queryRoomId, loggedInUser);
+              setLoading(false);
             } else {
               // existing room different than one in url
 
@@ -89,7 +95,7 @@ export const UserProvider: FC<Props> = ({ children }) => {
           } else {
             // didnt  have room in url but has existing room
 
-            await joinRoom(queryRoomId, loggedInUser);
+            await joinRoom(roomId, loggedInUser);
             router.push({ pathname: "/room", query: { id: roomId } });
           }
         } catch (error) {
