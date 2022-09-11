@@ -31,7 +31,13 @@ function reducer(
   }
 }
 
-export const useGuesses = ({ isUserTeamInRoom }: { isUserTeamInRoom: boolean }) => {
+export const useGuesses = ({
+  isUserTeamInRoom,
+  roomId,
+}: {
+  isUserTeamInRoom: boolean;
+  roomId: string;
+}) => {
   const socket = useContext(SocketContext);
   const { user } = useUser();
 
@@ -68,7 +74,7 @@ export const useGuesses = ({ isUserTeamInRoom }: { isUserTeamInRoom: boolean }) 
     } else {
       const newGuess = await postGuess(guess);
       dispatch({ payload: newGuess, type: "add" });
-      socket.emit("newGuess", newGuess);
+      socket.emit("newGuess", { ...newGuess, roomId });
     }
   };
 
