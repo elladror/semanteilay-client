@@ -12,6 +12,7 @@ import useUser from "../../hooks/useUser";
 import MakeGuess from "../../components/makeGuess";
 import { useGuesses } from "../../hooks/useGuesses";
 import Box from "@mui/material/Box";
+import { Collapse } from "@mui/material";
 
 const Room: FC = () => {
   const router = useRouter();
@@ -26,37 +27,35 @@ const Room: FC = () => {
 
   const { guesses, addGuess } = useGuesses({ isUserTeamInRoom, roomId: room?.id });
 
-  useEffect(() => {
-    if (isUserTeamInRoom) window.location.href = "#teams";
-  }, [isUserTeamInRoom]);
-
   if (isLoading || isError) return <h1>a</h1>;
   // TODO: add proper handling
 
   return (
     <>
-      <Button
-        onClick={leaveRoom}
-        sx={{
-          alignSelf: "flex-start",
-          borderRadius: "50%",
-        }}
-      >
-        <Avatar
+      <Collapse timeout={500} easing={"ease-in-out"} in={!isGuessing}>
+        <Button
+          onClick={leaveRoom}
           sx={{
-            height: { xs: "1.9rem", sm: "2.5rem" },
-            width: { xs: "1.9rem", sm: "2.5rem" },
-            backgroundColor: theme.palette.secondary.main,
+            alignSelf: "flex-start",
+            borderRadius: "50%",
           }}
         >
-          <ArrowBackIcon />
-        </Avatar>
-      </Button>
-      <Typography variant="h3" sx={{ my: 4, textAlign: "center" }}>
-        <span key={participantCount} className="flip-animate">
-          {room.name} With <span data-hover={participantCount}>{participantCount}</span> Players
-        </span>
-      </Typography>
+          <Avatar
+            sx={{
+              height: { xs: "1.9rem", sm: "2.5rem" },
+              width: { xs: "1.9rem", sm: "2.5rem" },
+              backgroundColor: theme.palette.secondary.main,
+            }}
+          >
+            <ArrowBackIcon />
+          </Avatar>
+        </Button>
+        <Typography variant="h3" sx={{ my: 4, textAlign: "center" }}>
+          <span key={participantCount} className="flip-animate">
+            {room.name} With <span data-hover={participantCount}>{participantCount}</span> Players
+          </span>
+        </Typography>
+      </Collapse>
       <Teams room={room} isUserTeamInRoom={isUserTeamInRoom} isGuessing={isGuessing} />
       <Box
         sx={{

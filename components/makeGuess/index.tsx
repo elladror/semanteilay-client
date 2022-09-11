@@ -26,20 +26,7 @@ const MakeGuess: FC<Props> = ({ handleGuess, relate, isUserTeamInRoom }) => {
   return (
     <>
       {isUserTeamInRoom && (
-        <form
-          onSubmit={handleSubmit}
-          onFocus={() => {
-            relate(true);
-            setTimeout(() => {
-              document
-                .getElementById("teams")
-                ?.scrollIntoView({ block: "start", inline: "nearest", behavior: "smooth" });
-            }, 200);
-          }}
-          onBlur={() => {
-            relate(false);
-          }}
-        >
+        <form onSubmit={handleSubmit} onFocus={() => relate(true)} onBlur={() => relate(false)}>
           <Box
             sx={{
               marginTop: { sm: "3rem", xs: "1rem" },
