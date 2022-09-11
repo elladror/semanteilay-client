@@ -27,7 +27,7 @@ const Room: FC = () => {
 
   const { guesses, addGuess } = useGuesses({ isUserTeamInRoom, roomId: room?.id });
 
-  if (isLoading || isError) return <h1>a</h1>;
+  if (isLoading || isError) return <h1></h1>;
   // TODO: add proper handling
 
   return (
