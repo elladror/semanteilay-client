@@ -1,0 +1,13 @@
+{
+  "workbench.colorTheme": "Default Dark+",
+  "workbench.colorCustomizations": {
+    "[Default Dark+]": {
+      "titleBar.activeBackground": "#1b4332",
+    }
+  },
+  "eslint.format.enable": true,
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "dbaeumer.vscode-eslint",
+  "eslint.lintTask.enable": true,
+  "eslint.run": "onSave",
+}
