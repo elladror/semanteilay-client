@@ -4,12 +4,12 @@ import { useInput } from "../../hooks/useInput";
 import { useLocalStorage } from "usehooks-ts";
 import Title from "../title";
 import useUser from "../../hooks/useUser";
-import { AxiosError } from "axios";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import Alert from "@mui/material/Alert";
 import AlertTitle from "@mui/material/AlertTitle";
 import { Box } from "@mui/material";
+import { ApiError } from "next/dist/server/api-utils";
 
 const nameMaxLength = 10;
 
@@ -22,7 +22,7 @@ const Login: FC = () => {
     error: inputError,
   } = useInput("", nameMaxLength);
   const [warning, setWarning] = useState<string | null>(null);
-  const [error, setError] = useState<AxiosError | null>(null);
+  const [error, setError] = useState<ApiError | null>(null);
   const router = useRouter();
   const { signUp } = useUser();
 
@@ -58,10 +58,10 @@ const Login: FC = () => {
       setLastNickname(name);
       router.push("/");
     } catch (error) {
-      if ((error as AxiosError).response?.status === 409) {
+      if ((error as ApiError).statusCode === 409) {
         setWarning("Name Taken");
       } else {
-        setError(error as AxiosError);
+        setError(error as ApiError);
       }
     }
   };

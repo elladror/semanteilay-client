@@ -3,7 +3,7 @@ import AlertTitle from "@mui/material/AlertTitle";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import { Box } from "@mui/system";
-import { AxiosError } from "axios";
+import { ApiError } from "next/dist/server/api-utils";
 import { FC, FormEventHandler, useContext, useEffect, useState } from "react";
 import { createRoom } from "../../api/roomsApi";
 import { SocketContext } from "../../context/socket";
@@ -17,7 +17,7 @@ const CreateRoom: FC = () => {
   const { joinRoom } = useRooms();
   const { user } = useUser();
   const [warning, setWarning] = useState<string | null>(null);
-  const [error, setError] = useState<AxiosError | null>(null);
+  const [error, setError] = useState<ApiError | null>(null);
 
   useEffect(() => {
     setRoomToCreate(`${user.name}'s room`);
@@ -32,10 +32,10 @@ const CreateRoom: FC = () => {
       socket.emit("create-room");
       await joinRoom({ roomId: id, userId: user.id });
     } catch (error) {
-      if ((error as AxiosError).response?.status === 409) {
+      if ((error as ApiError).statusCode === 409) {
         setWarning("Room name taken");
       } else {
-        setError(error as AxiosError);
+        setError(error as ApiError);
       }
     }
   };
