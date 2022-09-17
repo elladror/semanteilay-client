@@ -8,6 +8,7 @@ import TeamComponent from "../teamComponent";
 import TeamComponentAlt from "../teamComponentAlt";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
+import useDetectIOS from "../../hooks/useDetectIOS";
 
 interface Props {
   room: Room;
@@ -21,6 +22,7 @@ const Teams: FC<Props> = ({ room, isUserTeamInRoom, isGuessing }) => {
   const [isLoading, setLoading] = useState(false);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const isIOS = useDetectIOS();
 
   const joinTeamHandler = useCallback(
     (teamId: string) => async () => {
@@ -62,9 +64,12 @@ const Teams: FC<Props> = ({ room, isUserTeamInRoom, isGuessing }) => {
       >
         {room.teams.map((team) => (
           <Box key={team.id}>
-            <TeamComponentAlt show={isGuessing && isMobile} team={team}></TeamComponentAlt>
+            <TeamComponentAlt
+              show={isGuessing && isMobile && !isIOS}
+              team={team}
+            ></TeamComponentAlt>
             <TeamComponent
-              show={!(isGuessing && isMobile)}
+              show={!(isGuessing && isMobile && !isIOS)}
               team={team}
               disabled={isLoading}
               joinTeam={joinTeamHandler(team.id)}

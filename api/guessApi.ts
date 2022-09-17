@@ -1,12 +1,12 @@
 import { getApi, postApi, SERVER_URL } from "./api";
-import { GuessCreationInput } from "../models/index";
+import { Guess, GuessCreationInput } from "../models/index";
 
 const BASE_URL = "/guesses";
 
 const get = getApi(BASE_URL);
 const post = postApi(BASE_URL);
 
-export const addGuess = async (guess: GuessCreationInput) => await post(guess);
+export const addGuess = async (guess: GuessCreationInput) => (await post(guess)) as Guess;
 
 export const getAllGuesses = async () => await get({});
 

@@ -69,16 +69,16 @@ const TeamComponent: FC<Props> = ({ team, joinTeam, currentUser, disabled, leave
         >
           <Avatar
             sx={{
-              width: "2.5rem",
-              height: "2.5rem",
-              fontSize: "0.8rem",
+              width: "2.8rem",
+              height: "2.8rem",
+              fontSize: "0.9rem",
               visibility: topGuess.score === 0 ? "hidden" : "initial",
             }}
           >
             {topGuess.score}
           </Avatar>
           {guessCount !== 0 && (
-            <Typography>
+            <Typography variant="body2">
               <span ref={counter} key={guessCount} className="flip-animate">
                 <span data-hover={guessCount}>{guessCount}</span>
                 {countToWord[guessCount - 1] ?? "th"} guess

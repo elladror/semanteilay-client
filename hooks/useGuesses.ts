@@ -2,7 +2,7 @@ import { addGuess as postGuess, GET_ALL_TEAM_GUESSES_URL as url } from "../api/g
 import { fetcher } from "../api/api";
 import useSWR from "swr";
 import { Guess, GuessCreationInput } from "../models";
-import { useContext, useEffect, useReducer } from "react";
+import { useContext, useEffect, useReducer, useState } from "react";
 import useUser from "./useUser";
 import { SocketContext } from "../context/socket";
 
@@ -40,6 +40,7 @@ export const useGuesses = ({
 }) => {
   const socket = useContext(SocketContext);
   const { user } = useUser();
+  const [correctWord, setCorrectWord] = useState<string | null>(null);
 
   const { data, error } = useSWR(isUserTeamInRoom ? [url, user.teamId] : null, fetcher, {
     revalidateOnFocus: false,
@@ -54,6 +55,7 @@ export const useGuesses = ({
   useEffect(() => {
     const addGuess = (guess: Guess) => {
       dispatch({ payload: guess, type: "add" });
+      if (guess.score === 100) setCorrectWord(guess.word);
     };
     socket.on("newGuess", addGuess);
 
@@ -75,6 +77,8 @@ export const useGuesses = ({
       const newGuess = await postGuess(guess);
       dispatch({ payload: newGuess, type: "add" });
       socket.emit("newGuess", { ...newGuess, roomId });
+
+      if (newGuess.score === 100) setCorrectWord(newGuess.word);
     }
   };
 
@@ -84,5 +88,6 @@ export const useGuesses = ({
     isError: !!error,
     addGuess,
     isUserTeamInRoom,
+    correctWord,
   };
 };

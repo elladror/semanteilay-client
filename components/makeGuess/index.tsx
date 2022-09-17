@@ -1,6 +1,7 @@
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
+import React from "react";
 import { Dispatch, FC, FormEventHandler, SetStateAction, useRef } from "react";
 import { useInput } from "../../hooks/useInput";
 
@@ -60,4 +61,4 @@ const MakeGuess: FC<Props> = ({ handleGuess, relate, isUserTeamInRoom }) => {
   );
 };
 
-export default MakeGuess;
+export default React.memo(MakeGuess);

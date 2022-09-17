@@ -4,18 +4,25 @@ import { useInput } from "../../hooks/useInput";
 import { useLocalStorage } from "usehooks-ts";
 import Title from "../title";
 import useUser from "../../hooks/useUser";
-import { AxiosError } from "axios";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import Alert from "@mui/material/Alert";
 import AlertTitle from "@mui/material/AlertTitle";
 import { Box } from "@mui/material";
+import { ApiError } from "next/dist/server/api-utils";
+
+const nameMaxLength = 10;
 
 const Login: FC = () => {
   const [lastNickname, setLastNickname] = useLocalStorage("last-nickname", "");
-  const { value: name, setValue: setName, bind: bindInput } = useInput("");
-  const [warning, setWarning] = useState("");
-  const [error, setError] = useState<AxiosError | null>(null);
+  const {
+    value: name,
+    setValue: setName,
+    bind: bindInput,
+    error: inputError,
+  } = useInput("", nameMaxLength);
+  const [warning, setWarning] = useState<string | null>(null);
+  const [error, setError] = useState<ApiError | null>(null);
   const router = useRouter();
   const { signUp } = useUser();
 
@@ -29,9 +36,19 @@ const Login: FC = () => {
 
   const handleSubmit: FormEventHandler<HTMLFormElement> = async (event) => {
     event.preventDefault();
+    setError(null);
+    setWarning(null);
 
-    if (name.length > 10) {
+    if (name.length > nameMaxLength) {
       setWarning("Name longer than 10 characters");
+
+      return;
+    } else if (name.length === 0) {
+      setWarning("You need to pick a name");
+
+      return;
+    } else if (inputError) {
+      setWarning("Name contains illegal characters");
 
       return;
     }
@@ -41,10 +58,10 @@ const Login: FC = () => {
       setLastNickname(name);
       router.push("/");
     } catch (error) {
-      if ((error as AxiosError).response?.status === 409) {
+      if ((error as ApiError).statusCode === 409) {
         setWarning("Name Taken");
       } else {
-        setError(error as AxiosError);
+        setError(error as ApiError);
       }
     }
   };
@@ -54,10 +71,12 @@ const Login: FC = () => {
       <Title>This shit</Title>
       <Box sx={{ textAlign: "center" }}>
         <form onSubmit={handleSubmit}>
-          <TextField {...bindInput} label="nickname" sx={{ margin: 1 }} />
-          <Button type="submit" sx={{ width: "15ch" }}>
-            <b>Play</b>
-          </Button>
+          <Box sx={{ display: "flex", marginBottom: 3 }}>
+            <TextField {...bindInput} label="nickname" sx={{ marginRight: 1 }} />
+            <Button type="submit">
+              <b>Play</b>
+            </Button>
+          </Box>
         </form>
       </Box>
       {warning && (
