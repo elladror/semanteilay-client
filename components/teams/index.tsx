@@ -64,9 +64,12 @@ const Teams: FC<Props> = ({ room, isUserTeamInRoom, isGuessing }) => {
       >
         {room.teams.map((team) => (
           <Box key={team.id}>
-            <TeamComponentAlt show={isGuessing && isMobile} team={team}></TeamComponentAlt>
+            <TeamComponentAlt
+              show={isGuessing && isMobile && !isIOS}
+              team={team}
+            ></TeamComponentAlt>
             <TeamComponent
-              show={!(isGuessing && isMobile)}
+              show={!(isGuessing && isMobile && !isIOS)}
               team={team}
               disabled={isLoading}
               joinTeam={joinTeamHandler(team.id)}
