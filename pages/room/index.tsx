@@ -12,7 +12,7 @@ import useUser from "../../hooks/useUser";
 import MakeGuess from "../../components/makeGuess";
 import { useGuesses } from "../../hooks/useGuesses";
 import Box from "@mui/material/Box";
-import { Collapse } from "@mui/material";
+import { Alert, Collapse } from "@mui/material";
 import useDetectIOS from "../../hooks/useDetectIOS";
 
 const Room: FC = () => {
@@ -23,6 +23,7 @@ const Room: FC = () => {
   const { user } = useUser();
   const [isGuessing, setGuessing] = useState(false);
   const isIOS = useDetectIOS();
+  const [alert, setAlert] = useState(false);
 
   const isUserTeamInRoom =
     isLoading || isError ? false : room.teams.map(({ id }) => id).includes(user.teamId ?? "");
@@ -66,11 +67,13 @@ const Room: FC = () => {
           alignItems: "center",
         }}
       >
+        {alert && <Alert>{"Don't know that word"}</Alert>}
         <MakeGuess
           isUserTeamInRoom={isUserTeamInRoom}
           relate={setGuessing}
           handleGuess={async (word: string) => {
             try {
+              setAlert(false);
               addGuess({
                 word,
                 ownerId: user.id,
@@ -78,6 +81,7 @@ const Room: FC = () => {
                 roomId: room.id,
               });
             } catch (err) {
+              setAlert(true);
               console.log("Don't know that word"); // TODO: implement don't know the word
             }
           }}
