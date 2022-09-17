@@ -55,6 +55,7 @@ export const useGuesses = ({
   useEffect(() => {
     const addGuess = (guess: Guess) => {
       dispatch({ payload: guess, type: "add" });
+      if (guess.score === 100) setCorrectWord(guess.word);
     };
     socket.on("newGuess", addGuess);
 
