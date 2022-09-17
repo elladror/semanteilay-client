@@ -49,7 +49,6 @@ const MakeGuess: FC<Props> = ({ handleGuess, relate, isUserTeamInRoom }) => {
             <Button
               variant="contained"
               type="submit"
-              onClick={(_ev) => console.log("guess clicked")}
               sx={{ width: "15ch", borderTopLeftRadius: 0, borderBottomLeftRadius: 0 }}
             >
               <b>guess</b>
