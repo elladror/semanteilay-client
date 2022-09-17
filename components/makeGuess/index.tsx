@@ -49,6 +49,7 @@ const MakeGuess: FC<Props> = ({ handleGuess, relate, isUserTeamInRoom }) => {
             <Button
               variant="contained"
               type="submit"
+              onClick={(ev) => ev.currentTarget.focus()}
               sx={{ width: "15ch", borderTopLeftRadius: 0, borderBottomLeftRadius: 0 }}
             >
               <b>guess</b>

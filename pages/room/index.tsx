@@ -13,6 +13,7 @@ import MakeGuess from "../../components/makeGuess";
 import { useGuesses } from "../../hooks/useGuesses";
 import Box from "@mui/material/Box";
 import { Collapse } from "@mui/material";
+import useDetectIOS from "../../hooks/useDetectIOS";
 
 const Room: FC = () => {
   const router = useRouter();
@@ -21,6 +22,7 @@ const Room: FC = () => {
   );
   const { user } = useUser();
   const [isGuessing, setGuessing] = useState(false);
+  const isIOS = useDetectIOS();
 
   const isUserTeamInRoom =
     isLoading || isError ? false : room.teams.map(({ id }) => id).includes(user.teamId ?? "");
@@ -32,7 +34,7 @@ const Room: FC = () => {
 
   return (
     <>
-      <Collapse timeout={500} easing={"ease-in-out"} in={!isGuessing}>
+      <Collapse timeout={500} easing={"ease-in-out"} in={!(isGuessing && !isIOS)}>
         <Button
           onClick={leaveRoom}
           sx={{
