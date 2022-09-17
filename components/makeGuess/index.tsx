@@ -1,7 +1,7 @@
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
-import { Dispatch, FC, MouseEventHandler, SetStateAction, useRef } from "react";
+import { Dispatch, FC, FormEventHandler, SetStateAction, useRef } from "react";
 import { useInput } from "../../hooks/useInput";
 
 interface Props {
@@ -14,7 +14,7 @@ const MakeGuess: FC<Props> = ({ handleGuess, relate, isUserTeamInRoom }) => {
   const { value: word, bind, reset } = useInput("");
   const input = useRef<HTMLInputElement>();
 
-  const handleSubmit: MouseEventHandler<HTMLButtonElement> = (event) => {
+  const handleSubmit: FormEventHandler<HTMLFormElement> = (event) => {
     event.preventDefault();
 
     const guess = word.trim();
@@ -26,7 +26,7 @@ const MakeGuess: FC<Props> = ({ handleGuess, relate, isUserTeamInRoom }) => {
   return (
     <>
       {isUserTeamInRoom && (
-        <form onFocus={() => relate(true)} onBlur={() => relate(false)}>
+        <form onSubmit={handleSubmit} onFocus={() => relate(true)} onBlur={() => relate(false)}>
           <Box
             sx={{
               marginTop: { sm: "3rem", xs: "1rem" },
@@ -48,8 +48,8 @@ const MakeGuess: FC<Props> = ({ handleGuess, relate, isUserTeamInRoom }) => {
             />
             <Button
               variant="contained"
-              type="button"
-              onClick={handleSubmit}
+              type="submit"
+              onClick={(_ev) => console.log("guess clicked")}
               sx={{ width: "15ch", borderTopLeftRadius: 0, borderBottomLeftRadius: 0 }}
             >
               <b>guess</b>
