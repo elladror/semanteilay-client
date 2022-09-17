@@ -12,8 +12,11 @@ import useUser from "../../hooks/useUser";
 import MakeGuess from "../../components/makeGuess";
 import { useGuesses } from "../../hooks/useGuesses";
 import Box from "@mui/material/Box";
-import { Alert, Collapse } from "@mui/material";
 import useDetectIOS from "../../hooks/useDetectIOS";
+import Collapse from "@mui/material/Collapse";
+import Alert from "@mui/material/Alert";
+import AlertTitle from "@mui/material/AlertTitle";
+import { ApiError } from "next/dist/server/api-utils";
 
 const Room: FC = () => {
   const router = useRouter();
@@ -23,12 +26,14 @@ const Room: FC = () => {
   const { user } = useUser();
   const [isGuessing, setGuessing] = useState(false);
   const isIOS = useDetectIOS();
-  const [alert, setAlert] = useState(false);
+  const [dontKnowWord, setDontKnowWord] = useState<string | null>(null);
+  const [error, setError] = useState<ApiError | null>(null);
+  const [existingGuess, setExistingGuess] = useState<string | null>(null);
 
   const isUserTeamInRoom =
     isLoading || isError ? false : room.teams.map(({ id }) => id).includes(user.teamId ?? "");
 
-  const { guesses, addGuess } = useGuesses({ isUserTeamInRoom, roomId: room?.id });
+  const { guesses, addGuess, correctWord } = useGuesses({ isUserTeamInRoom, roomId: room?.id });
 
   if (isLoading || isError) return <h1></h1>;
   // TODO: add proper handling
@@ -67,22 +72,41 @@ const Room: FC = () => {
           alignItems: "center",
         }}
       >
-        {alert && <Alert>{"Don't know that word"}</Alert>}
+        {dontKnowWord && <Alert severity="info">{`Don't know the word ${dontKnowWord}`}</Alert>}
+        {correctWord && (
+          <Alert severity="success">{`Success! Today's word was: ${correctWord}`}</Alert>
+        )}
+        {error && (
+          <Alert severity="error">
+            <AlertTitle>Error occured</AlertTitle>
+            {error.message}
+          </Alert>
+        )}
+        {existingGuess && <Alert severity="info">{`Jinx! ${existingGuess} already guessed`}</Alert>}
         <MakeGuess
           isUserTeamInRoom={isUserTeamInRoom}
           relate={setGuessing}
           handleGuess={async (word: string) => {
             try {
-              setAlert(false);
-              addGuess({
+              setDontKnowWord(null);
+              setError(null);
+              setExistingGuess(null);
+              await addGuess({
                 word,
                 ownerId: user.id,
                 teamId: user.teamId as string,
                 roomId: room.id,
               });
-            } catch (err) {
-              setAlert(true);
-              console.log("Don't know that word"); // TODO: implement don't know the word
+            } catch (error) {
+              const { statusCode } = error as ApiError;
+
+              if (statusCode === 406) {
+                setDontKnowWord(word);
+              } else if (statusCode === 409) {
+                setExistingGuess(word);
+              } else {
+                setError(error as ApiError);
+              }
             }
           }}
         />
