@@ -2,7 +2,6 @@
 import { ApiError } from "next/dist/server/api-utils";
 import { useCallback, useState } from "react";
 
-// eslint-disable-next-line @typescript-eslint/ban-types
 const useApi = <T extends (...args: any) => any>(request: T) => {
   const [error, setError] = useState<ApiError | null>(null);
   const [isLoading, setLoading] = useState(false);
@@ -10,6 +9,7 @@ const useApi = <T extends (...args: any) => any>(request: T) => {
   const call = useCallback(
     (param: Parameters<T>) => {
       setLoading(true);
+      setError(null);
       return request(param)
         .then((res: any) => {
           setLoading(false);
@@ -19,6 +19,7 @@ const useApi = <T extends (...args: any) => any>(request: T) => {
         .catch((err: any) => {
           setError(err as ApiError);
           setLoading(false);
+          throw err;
         });
     },
     [request]
