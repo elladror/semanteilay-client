@@ -11,6 +11,9 @@ export const getApi =
       });
       return res.data;
     } catch (e) {
+      if ((e as AxiosError).message === "Network Error")
+        throw new ApiError(400, "No Internet Connection");
+
       const res = (e as AxiosError).response;
       if (res) throw new ApiError(res.status, res.data as string);
 
@@ -25,6 +28,9 @@ export const postApi =
       const res = await axios.post(`${SERVER_URL + baseUrl + path}`, payload);
       return res.data;
     } catch (e) {
+      if ((e as AxiosError).message === "Network Error")
+        throw new ApiError(400, "No Internet Connection");
+
       const res = (e as AxiosError).response;
       if (res) throw new ApiError(res.status, res.data as string);
 
@@ -39,6 +45,10 @@ export const patchApi =
       const res = await axios.patch(`${SERVER_URL + baseUrl + path}`, payload);
       return res.data;
     } catch (e) {
+      console.log(e);
+      if ((e as AxiosError).message === "Network Error")
+        throw new ApiError(400, "No Internet Connection");
+
       const res = (e as AxiosError).response;
       if (res) throw new ApiError(res.status, res.data as string);
 
@@ -53,6 +63,9 @@ export const deleteApi =
       const res = await axios.delete(`${SERVER_URL + baseUrl + path}`, payload);
       return res.data;
     } catch (e) {
+      if ((e as AxiosError).message === "Network Error")
+        throw new ApiError(400, "No Internet Connection");
+
       const res = (e as AxiosError).response;
       if (res) throw new ApiError(res.status, res.data as string);
 
