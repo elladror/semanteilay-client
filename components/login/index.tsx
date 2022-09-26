@@ -10,6 +10,7 @@ import Alert from "@mui/material/Alert";
 import AlertTitle from "@mui/material/AlertTitle";
 import { Box } from "@mui/material";
 import { ApiError } from "next/dist/server/api-utils";
+import useApi from "../../hooks/useApi";
 
 const nameMaxLength = 10;
 
@@ -22,9 +23,9 @@ const Login: FC = () => {
     error: inputError,
   } = useInput("", nameMaxLength);
   const [warning, setWarning] = useState<string | null>(null);
-  const [error, setError] = useState<ApiError | null>(null);
   const router = useRouter();
   const { signUp } = useUser();
+  const [signUpRequest, isLoading, error] = useApi(signUp);
 
   useEffect(() => {
     router.prefetch("/");
@@ -36,7 +37,6 @@ const Login: FC = () => {
 
   const handleSubmit: FormEventHandler<HTMLFormElement> = async (event) => {
     event.preventDefault();
-    setError(null);
     setWarning(null);
 
     if (name.length > nameMaxLength) {
@@ -54,14 +54,12 @@ const Login: FC = () => {
     }
 
     try {
-      await signUp({ name });
+      await signUpRequest({ name });
       setLastNickname(name);
       router.push("/");
     } catch (error) {
       if ((error as ApiError).statusCode === 409) {
         setWarning("Name Taken");
-      } else {
-        setError(error as ApiError);
       }
     }
   };
@@ -73,23 +71,24 @@ const Login: FC = () => {
         <form onSubmit={handleSubmit}>
           <Box sx={{ display: "flex", marginBottom: 3 }}>
             <TextField {...bindInput} label="nickname" sx={{ marginRight: 1 }} />
-            <Button type="submit">
+            <Button disabled={isLoading} type="submit">
               <b>Play</b>
             </Button>
           </Box>
         </form>
       </Box>
-      {warning && (
+      {warning ? (
         <Alert severity="warning">
           <AlertTitle>Try a different name</AlertTitle>
           {warning}
         </Alert>
-      )}
-      {error && (
-        <Alert severity="error">
-          <AlertTitle>Error occured</AlertTitle>
-          {error.message}
-        </Alert>
+      ) : (
+        error && (
+          <Alert severity="error">
+            <AlertTitle>Error occured</AlertTitle>
+            {error.message}
+          </Alert>
+        )
       )}
     </main>
   );

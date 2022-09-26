@@ -7,6 +7,7 @@ import { ApiError } from "next/dist/server/api-utils";
 import { FC, FormEventHandler, useContext, useEffect, useState } from "react";
 import { createRoom } from "../../api/roomsApi";
 import { SocketContext } from "../../context/socket";
+import useApi from "../../hooks/useApi";
 import { useInput } from "../../hooks/useInput";
 import { useRooms } from "../../hooks/useRooms";
 import useUser from "../../hooks/useUser";
@@ -17,7 +18,11 @@ const CreateRoom: FC = () => {
   const { joinRoom } = useRooms();
   const { user } = useUser();
   const [warning, setWarning] = useState<string | null>(null);
-  const [error, setError] = useState<ApiError | null>(null);
+  const [createRoomRequest, isCreateRoomLoading, createRoomError] = useApi(createRoom);
+  const [joinRoomRequest, isJoinRoomLoading, joinRoomError] = useApi(joinRoom);
+
+  const isLoading = isCreateRoomLoading || isJoinRoomLoading;
+  const error = createRoomError || joinRoomError;
 
   useEffect(() => {
     setRoomToCreate(`${user.name}'s room`);
@@ -25,17 +30,14 @@ const CreateRoom: FC = () => {
 
   const createNewRoom = async (roomName: string) => {
     setWarning(null);
-    setError(null);
 
     try {
-      const { id } = await createRoom(roomName);
+      const { id } = await createRoomRequest(roomName);
       socket.emit("create-room");
-      await joinRoom({ roomId: id, userId: user.id });
+      await joinRoomRequest({ roomId: id, userId: user.id });
     } catch (error) {
       if ((error as ApiError).statusCode === 409) {
         setWarning("Room name taken");
-      } else {
-        setError(error as ApiError);
       }
     }
   };
@@ -52,23 +54,24 @@ const CreateRoom: FC = () => {
         <form onSubmit={handleSubmit}>
           <Box sx={{ display: "flex", marginBottom: 3 }}>
             <TextField variant="standard" {...bind} label="room name" sx={{ marginRight: 1 }} />
-            <Button type="submit" sx={{ width: "20ch" }}>
+            <Button disabled={isLoading} type="submit" sx={{ width: "20ch" }}>
               <b>Create Room</b>
             </Button>
           </Box>
         </form>
       </Box>
-      {warning && (
+      {warning ? (
         <Alert severity="warning">
           <AlertTitle>Try a different name</AlertTitle>
           {warning}
         </Alert>
-      )}
-      {error && (
-        <Alert severity="error">
-          <AlertTitle>Error occured</AlertTitle>
-          {error.message}
-        </Alert>
+      ) : (
+        error && (
+          <Alert severity="error">
+            <AlertTitle>Error occured</AlertTitle>
+            {error.message}
+          </Alert>
+        )
       )}
     </Box>
   );
