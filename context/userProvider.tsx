@@ -146,7 +146,9 @@ export const UserProvider: FC<Props> = ({ children }) => {
 
   useEffect(() => {
     const socketDisconnectHandler = () => {
-      setIdle(user.id);
+      setIdle(user.id).catch((_e) => {
+        // TODO: handle error
+      });
     };
 
     socket.on("disconnect", socketDisconnectHandler);
