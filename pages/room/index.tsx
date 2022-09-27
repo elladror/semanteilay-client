@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import { FC, useState } from "react";
+import { FC, useCallback, useState } from "react";
 import { useRoom } from "../../hooks/useRoom";
 import Guesses from "../../components/guesses";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
@@ -17,6 +17,7 @@ import Collapse from "@mui/material/Collapse";
 import Alert from "@mui/material/Alert";
 import AlertTitle from "@mui/material/AlertTitle";
 import { ApiError } from "next/dist/server/api-utils";
+import useApi from "../../hooks/useApi";
 
 const Room: FC = () => {
   const router = useRouter();
@@ -29,11 +30,16 @@ const Room: FC = () => {
   const [dontKnowWord, setDontKnowWord] = useState<string | null>(null);
   const [error, setError] = useState<ApiError | null>(null);
   const [existingGuess, setExistingGuess] = useState<string | null>(null);
+  const [leaveRoomRequest, isLeaveRoomLoading] = useApi(leaveRoom);
 
   const isUserTeamInRoom =
     isLoading || isError ? false : room.teams.map(({ id }) => id).includes(user.teamId ?? "");
 
   const { guesses, addGuess, correctWord } = useGuesses({ isUserTeamInRoom, roomId: room?.id });
+
+  const leaveRoomHandler = useCallback(() => {
+    leaveRoomRequest().catch();
+  }, [leaveRoomRequest]);
 
   if (isLoading || isError) return <h1></h1>;
   // TODO: add proper handling
@@ -42,7 +48,8 @@ const Room: FC = () => {
     <>
       <Collapse timeout={500} easing={"ease-in-out"} in={!(isGuessing && !isIOS)}>
         <Button
-          onClick={leaveRoom}
+          onClick={leaveRoomHandler}
+          disabled={isLeaveRoomLoading}
           sx={{
             alignSelf: "flex-start",
             borderRadius: "50%",
