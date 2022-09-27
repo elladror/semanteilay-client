@@ -9,7 +9,9 @@ import TeamComponentAlt from "../teamComponentAlt";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
 import useDetectIOS from "../../hooks/useDetectIOS";
-
+import useApi from "../../hooks/useApi";
+import Alert from "@mui/material/Alert";
+import AlertTitle from "@mui/material/AlertTitle";
 interface Props {
   room: Room;
   isUserTeamInRoom: boolean;
@@ -19,25 +21,33 @@ interface Props {
 const Teams: FC<Props> = ({ room, isUserTeamInRoom, isGuessing }) => {
   const { switchTeam, leaveTeam, createTeam } = useTeam(room);
   const { user } = useUser();
-  const [isLoading, setLoading] = useState(false);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const isIOS = useDetectIOS();
+  const [joinTeamRequest, isJoinTeamLoading, joinTeamError] = useApi(switchTeam);
+  const [leaveTeamRequest, isLeaveTeamLoading, leaveTeamError] = useApi(leaveTeam);
+  const [createTeamRequest, isCreateTeamLoading, createTeamError] = useApi(createTeam);
+
+  const isLoading = isJoinTeamLoading || isLeaveTeamLoading;
+  const error = joinTeamError || leaveTeamError;
 
   const joinTeamHandler = useCallback(
-    (teamId: string) => async () => {
-      setLoading(true);
-      await switchTeam(teamId);
-      setLoading(false);
+    (teamId: string) => () => {
+      joinTeamRequest(teamId).catch();
     },
-    [switchTeam]
+    [joinTeamRequest]
   );
 
-  const leaveTeamHandler = useCallback(async () => {
-    setLoading(true);
-    await leaveTeam();
-    setLoading(false);
-  }, [leaveTeam]);
+  const leaveTeamHandler = useCallback(() => {
+    leaveTeamRequest().catch();
+  }, [leaveTeamRequest]);
+
+  const createTeamHandler = useCallback(
+    (roomId: string) => () => {
+      createTeamRequest(roomId).catch();
+    },
+    [createTeamRequest]
+  );
 
   return (
     <>
@@ -82,16 +92,23 @@ const Teams: FC<Props> = ({ room, isUserTeamInRoom, isGuessing }) => {
       {isUserTeamInRoom ? (
         <></>
       ) : (
-        <Button
-          variant="outlined"
-          color="success"
-          sx={{ display: "flex", alignContent: "center", textAlign: "center" }}
-          onClick={() => {
-            createTeam(room.id);
-          }}
-        >
-          create team
-        </Button>
+        <Box>
+          <Button
+            variant="outlined"
+            color="success"
+            sx={{ display: "flex", alignContent: "center", textAlign: "center" }}
+            onClick={createTeamHandler(room.id)}
+            disabled={isCreateTeamLoading}
+          >
+            create team
+          </Button>
+          {createTeamError && (
+            <Alert severity="error">
+              <AlertTitle>could not create team</AlertTitle>
+              {createTeamError.message}
+            </Alert>
+          )}
+        </Box>
       )}
     </>
   );

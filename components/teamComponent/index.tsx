@@ -104,7 +104,7 @@ const TeamComponent: FC<Props> = ({ team, joinTeam, currentUser, disabled, leave
             Join
           </Button>
         ) : (
-          <Button size="small" onClick={leaveTeam} color="error">
+          <Button size="small" disabled={disabled} onClick={leaveTeam} color="error">
             Leave
           </Button>
         )}
