@@ -27,7 +27,7 @@ const Lobby: NextPage = () => {
 
   return (
     <main>
-      <Title>Lobby</Title>
+      <Title>The Lobby</Title>
       <CreateRoom />
       <Rooms rooms={rooms} />
     </main>

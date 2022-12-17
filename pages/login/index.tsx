@@ -67,7 +67,7 @@ const Login: NextPage = () => {
 
   return (
     <main>
-      <Title>This shit</Title>
+      <Title>Semanteilay</Title>
       <Box sx={{ textAlign: "center" }}>
         <form onSubmit={handleSubmit}>
           <Box sx={{ display: "flex", marginBottom: 3 }}>
@@ -87,7 +87,7 @@ const Login: NextPage = () => {
         error && (
           <Alert severity="error">
             <AlertTitle>Error occured</AlertTitle>
-            {error.message}
+            Unable to reach server
           </Alert>
         )
       )}
