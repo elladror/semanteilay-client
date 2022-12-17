@@ -58,6 +58,10 @@ export const UserProvider: FC<Props> = ({ children }) => {
           if (!userId) throw new Error();
 
           const loggedInUser = await login({ userId, socketId: socket.id });
+          console.log(loggedInUser);
+
+          if (!loggedInUser) throw new Error(); // the user has status "OLD" and should be sent to login
+
           setUser(loggedInUser);
           const { roomId } = loggedInUser;
 
@@ -93,7 +97,7 @@ export const UserProvider: FC<Props> = ({ children }) => {
               goToLobby();
             }
           } else {
-            // didnt  have room in url but has existing room
+            // didnt have room in url but has existing room
 
             await joinRoom(roomId, loggedInUser);
             router.push({ pathname: "/room", query: { id: roomId } });
