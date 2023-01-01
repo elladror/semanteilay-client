@@ -38,7 +38,9 @@ const Room: FC = () => {
   const { guesses, addGuess, correctWord } = useGuesses({ isUserTeamInRoom, roomId: room?.id });
 
   const leaveRoomHandler = useCallback(() => {
-    leaveRoomRequest().catch();
+    leaveRoomRequest().catch((_e) => {
+      //
+    });
   }, [leaveRoomRequest]);
 
   if (isLoading || isError) return <h1></h1>;
