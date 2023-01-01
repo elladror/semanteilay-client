@@ -1,6 +1,6 @@
-# fly.toml file generated for semanteily on 2022-12-17T00:33:39+02:00
+# fly.toml file generated for semanteilay on 2023-01-01T18:46:56+02:00
 
-app = "semanteily"
+app = "semanteilay"
 kill_signal = "SIGINT"
 kill_timeout = 5
 processes = []
