@@ -10,6 +10,7 @@ import { SocketContext } from "../../context/socket";
 import { Team, User } from "../../models";
 import PlayersPopover from "../playersPopover";
 import Rank from "../rank";
+import CrownIcon from "../crownIcon";
 
 interface Props {
   team: Team;
@@ -18,11 +19,20 @@ interface Props {
   disabled: boolean;
   leaveTeam: () => void;
   show: boolean;
+  place: number;
 }
 
 const countToWord = ["st", "nd", "rd"];
 
-const TeamComponent: FC<Props> = ({ team, joinTeam, currentUser, disabled, leaveTeam, show }) => {
+const TeamComponent: FC<Props> = ({
+  team,
+  joinTeam,
+  currentUser,
+  disabled,
+  leaveTeam,
+  show,
+  place,
+}) => {
   const isCurrentTeam = currentUser.teamId === team.id;
   const { name, topGuess, _count } = team;
   const counter = useRef<HTMLElement>(null);
@@ -42,7 +52,24 @@ const TeamComponent: FC<Props> = ({ team, joinTeam, currentUser, disabled, leave
   }, [socket, team.id]);
 
   return (
-    <Card raised={true} hidden={!show} sx={{ width: "12.5rem" }}>
+    <Card
+      raised={true}
+      hidden={!show}
+      sx={{ width: "12.5rem", position: "relative", overflow: "visible" }}
+    >
+      {place === 1 && (
+        <CrownIcon
+          fontSize="large"
+          sx={
+            show
+              ? {
+                  position: "absolute",
+                  transform: "translate(25%, -100%)",
+                }
+              : { opacity: 0 }
+          }
+        />
+      )}
       <CardContent>
         <Box sx={{ display: "flex", justifyContent: "space-between", pb: "1rem" }}>
           <Typography

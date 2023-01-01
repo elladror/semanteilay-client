@@ -1,6 +1,6 @@
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-import { FC, useCallback, useState } from "react";
+import { FC, useCallback } from "react";
 import useTeam from "../../hooks/useTeam";
 import useUser from "../../hooks/useUser";
 import { Room } from "../../models";
@@ -24,27 +24,32 @@ const Teams: FC<Props> = ({ room, isUserTeamInRoom, isGuessing }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const isIOS = useDetectIOS();
-  const [joinTeamRequest, isJoinTeamLoading, joinTeamError] = useApi(switchTeam);
-  const [leaveTeamRequest, isLeaveTeamLoading, leaveTeamError] = useApi(leaveTeam);
+  const [joinTeamRequest, isJoinTeamLoading] = useApi(switchTeam);
+  const [leaveTeamRequest, isLeaveTeamLoading] = useApi(leaveTeam);
   const [createTeamRequest, isCreateTeamLoading, createTeamError] = useApi(createTeam);
 
-  const isLoading = isJoinTeamLoading || isLeaveTeamLoading;
-  const error = joinTeamError || leaveTeamError;
+  const isLoading = isJoinTeamLoading || isLeaveTeamLoading || isCreateTeamLoading;
 
   const joinTeamHandler = useCallback(
     (teamId: string) => () => {
-      joinTeamRequest(teamId).catch();
+      joinTeamRequest(teamId).catch((_e) => {
+        //
+      });
     },
     [joinTeamRequest]
   );
 
   const leaveTeamHandler = useCallback(() => {
-    leaveTeamRequest().catch();
+    leaveTeamRequest().catch((_e) => {
+      //
+    });
   }, [leaveTeamRequest]);
 
   const createTeamHandler = useCallback(
     (roomId: string) => () => {
-      createTeamRequest(roomId).catch();
+      createTeamRequest(roomId).catch((_e) => {
+        //
+      });
     },
     [createTeamRequest]
   );
@@ -55,7 +60,9 @@ const Teams: FC<Props> = ({ room, isUserTeamInRoom, isGuessing }) => {
         id={"teams"}
         sx={{
           display: { xs: "-webkit-box", sm: "flex" },
-          py: "1rem",
+          pb: "1rem",
+          pt: "3rem",
+          mt: "-1.5rem",
           paddingInline: "1rem",
           gap: 2,
           maxWidth: { xs: 350, sm: 600, md: 900, lg: 1100 },
@@ -65,18 +72,19 @@ const Teams: FC<Props> = ({ room, isUserTeamInRoom, isGuessing }) => {
           },
           flexWrap: { sm: "wrap" },
           justifyContent: { sm: "space-evenly" },
-          overflow: { xs: "auto", sm: "initial" },
+          overflowX: { xs: "auto", sm: "initial" },
           ":last-child": { paddingInlineEnd: 1 },
           "&::-webkit-scrollbar": {
             width: "0.5em",
           },
         }}
       >
-        {room.teams.map((team) => (
+        {room.teams.map((team, index) => (
           <Box key={team.id}>
             <TeamComponentAlt
               show={isGuessing && isMobile && !isIOS}
               team={team}
+              place={index + 1}
             ></TeamComponentAlt>
             <TeamComponent
               show={!(isGuessing && isMobile && !isIOS)}
@@ -85,6 +93,7 @@ const Teams: FC<Props> = ({ room, isUserTeamInRoom, isGuessing }) => {
               joinTeam={joinTeamHandler(team.id)}
               leaveTeam={leaveTeamHandler}
               currentUser={user}
+              place={index + 1}
             ></TeamComponent>
           </Box>
         ))}
