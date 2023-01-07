@@ -96,6 +96,16 @@ export const useRoom = (id: string) => {
     [room?.teams, room?.id]
   );
 
+  useEffect(() => {
+    const handler = () => {
+      leaveRoom().catch((_e) => {
+        //
+      });
+    };
+
+    window.onpopstate = handler;
+  }, [leaveRoom]);
+
   return {
     room: room as Room,
     isLoading,
