@@ -19,7 +19,7 @@ interface Props {
   disabled: boolean;
   leaveTeam: () => void;
   show: boolean;
-  place: number;
+  isLeading: boolean;
 }
 
 const countToWord = ["st", "nd", "rd"];
@@ -31,7 +31,7 @@ const TeamComponent: FC<Props> = ({
   disabled,
   leaveTeam,
   show,
-  place,
+  isLeading,
 }) => {
   const isCurrentTeam = currentUser.teamId === team.id;
   const { name, topGuess, _count } = team;
@@ -57,7 +57,7 @@ const TeamComponent: FC<Props> = ({
       hidden={!show}
       sx={{ width: "12.5rem", position: "relative", overflow: "visible" }}
     >
-      {place === 1 && (
+      {isLeading && (
         <CrownIcon
           fontSize="large"
           sx={

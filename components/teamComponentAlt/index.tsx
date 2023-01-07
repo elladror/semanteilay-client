@@ -11,10 +11,10 @@ import Rank from "../rank";
 interface Props {
   team: Team;
   show: boolean;
-  place: number;
+  isLeading: boolean;
 }
 
-const TeamComponentAlt: FC<Props> = ({ team, show, place }) => {
+const TeamComponentAlt: FC<Props> = ({ team, show, isLeading }) => {
   const { name, topGuess } = team;
 
   return (
@@ -22,7 +22,7 @@ const TeamComponentAlt: FC<Props> = ({ team, show, place }) => {
       raised={true}
       sx={show ? { width: "8rem", position: "relative", overflow: "visible" } : { display: "none" }}
     >
-      {place === 1 && (
+      {isLeading && (
         <CrownIcon
           sx={
             show

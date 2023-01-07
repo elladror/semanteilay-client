@@ -16,12 +16,10 @@ function reducer(
 ) {
   switch (action.type) {
     case "add":
-      const teamToUpdate = state.teams.find(({ id }) => id === action.payload.teamId);
-      const updatedTeams = [
-        ...state.teams.filter(({ id }) => id !== teamToUpdate?.id),
-        { ...teamToUpdate, topGuess: action.payload.topGuess },
-      ];
-      updatedTeams.sort((team, otherTeam) => otherTeam.topGuess.score - team.topGuess.score);
+      const updatedTeams = state.teams.map((team) =>
+        team.id === action.payload.teamId ? { ...team, topGuess: action.payload.topGuess } : team
+      );
+
       return {
         ...state,
         teams: updatedTeams,

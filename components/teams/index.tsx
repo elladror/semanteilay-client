@@ -1,6 +1,6 @@
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-import { FC, useCallback } from "react";
+import { FC, useCallback, useMemo } from "react";
 import useTeam from "../../hooks/useTeam";
 import useUser from "../../hooks/useUser";
 import { Room } from "../../models";
@@ -54,6 +54,14 @@ const Teams: FC<Props> = ({ room, isUserTeamInRoom, isGuessing }) => {
     [createTeamRequest]
   );
 
+  const topTeamId = useMemo(
+    () =>
+      room.teams.reduce((topTeam, currentTeam) =>
+        topTeam.topGuess.score >= currentTeam.topGuess.score ? topTeam : currentTeam
+      ).id,
+    [room.teams]
+  );
+
   return (
     <>
       <Box
@@ -79,12 +87,12 @@ const Teams: FC<Props> = ({ room, isUserTeamInRoom, isGuessing }) => {
           },
         }}
       >
-        {room.teams.map((team, index) => (
+        {room.teams.map((team) => (
           <Box key={team.id}>
             <TeamComponentAlt
               show={isGuessing && isMobile && !isIOS}
               team={team}
-              place={index + 1}
+              isLeading={topTeamId === team.id}
             ></TeamComponentAlt>
             <TeamComponent
               show={!(isGuessing && isMobile && !isIOS)}
@@ -93,7 +101,7 @@ const Teams: FC<Props> = ({ room, isUserTeamInRoom, isGuessing }) => {
               joinTeam={joinTeamHandler(team.id)}
               leaveTeam={leaveTeamHandler}
               currentUser={user}
-              place={index + 1}
+              isLeading={topTeamId === team.id}
             ></TeamComponent>
           </Box>
         ))}
