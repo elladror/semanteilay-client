@@ -58,7 +58,6 @@ export const UserProvider: FC<Props> = ({ children }) => {
           if (!userId) throw new Error();
 
           const loggedInUser = await login({ userId, socketId: socket.id });
-          console.log(loggedInUser);
 
           if (!loggedInUser) throw new Error(); // the user has status "OLD" and should be sent to login
 
