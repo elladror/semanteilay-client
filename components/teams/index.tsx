@@ -5,7 +5,7 @@ import useTeam from "../../hooks/useTeam";
 import useUser from "../../hooks/useUser";
 import { Room } from "../../models";
 import TeamComponent from "../teamComponent";
-import TeamComponentAlt from "../teamComponentAlt";
+import TeamComponentMinified from "../teamComponentMinified";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
 import useDetectIOS from "../../hooks/useDetectIOS";
@@ -91,11 +91,11 @@ const Teams: FC<Props> = ({ room, isUserTeamInRoom, isGuessing }) => {
       >
         {room.teams.map((team) => (
           <Box key={team.id}>
-            <TeamComponentAlt
+            <TeamComponentMinified
               show={isGuessing && isMobile && !isIOS}
               team={team}
               isLeading={topTeamId === team.id}
-            ></TeamComponentAlt>
+            ></TeamComponentMinified>
             <TeamComponent
               show={!(isGuessing && isMobile && !isIOS)}
               team={team}

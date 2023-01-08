@@ -1,8 +1,18 @@
 import SvgIcon, { SvgIconProps } from "@mui/material/SvgIcon";
+import { useEffect, useRef } from "react";
 
 export default function CrownIcon(props: SvgIconProps) {
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const current = ref.current;
+    current?.classList.add("animate__bounce");
+    setTimeout(() => current?.classList.remove("animate__bounce"), 1000);
+    return () => current?.classList.remove("animate__bounce");
+  }, []);
+
   return (
-    <div className="animate__bounce">
+    <div ref={ref}>
       <SvgIcon
         {...props}
         fill="#000000"
