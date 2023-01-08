@@ -56,9 +56,11 @@ const Teams: FC<Props> = ({ room, isUserTeamInRoom, isGuessing }) => {
 
   const topTeamId = useMemo(
     () =>
-      room.teams.reduce((topTeam, currentTeam) =>
-        topTeam.topGuess.score >= currentTeam.topGuess.score ? topTeam : currentTeam
-      ).id,
+      room.teams.length
+        ? room.teams.reduce((topTeam, currentTeam) =>
+            topTeam.topGuess.score >= currentTeam.topGuess.score ? topTeam : currentTeam
+          ).id
+        : null,
     [room.teams]
   );
 
