@@ -5,8 +5,6 @@ import Guesses from "../../components/guesses";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import Typography from "@mui/material/Typography";
 import Teams from "../../components/teams";
-import Button from "@mui/material/Button";
-import Avatar from "@mui/material/Avatar";
 import theme from "../../src/theme";
 import useUser from "../../hooks/useUser";
 import MakeGuess from "../../components/makeGuess";
@@ -18,6 +16,8 @@ import Alert from "@mui/material/Alert";
 import AlertTitle from "@mui/material/AlertTitle";
 import { ApiError } from "next/dist/server/api-utils";
 import useApi from "../../hooks/useApi";
+import IconButton from "@mui/material/IconButton";
+import useMediaQuery from "@mui/material/useMediaQuery";
 
 const Room: FC = () => {
   const router = useRouter();
@@ -31,6 +31,7 @@ const Room: FC = () => {
   const [error, setError] = useState<ApiError | null>(null);
   const [existingGuess, setExistingGuess] = useState<string | null>(null);
   const [leaveRoomRequest, isLeaveRoomLoading] = useApi(leaveRoom);
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
   const isUserTeamInRoom =
     isLoading || isError ? false : room.teams.map(({ id }) => id).includes(user.teamId ?? "");
@@ -49,27 +50,23 @@ const Room: FC = () => {
   return (
     <>
       <Collapse timeout={500} easing={"ease-in-out"} in={!(isGuessing && !isIOS)}>
-        <Button
-          onClick={leaveRoomHandler}
-          disabled={isLeaveRoomLoading}
-          sx={{
-            alignSelf: "flex-start",
-            borderRadius: "50%",
-          }}
-        >
-          <Avatar
-            sx={{
-              height: { xs: "1.9rem", sm: "2.5rem" },
-              width: { xs: "1.9rem", sm: "2.5rem" },
-              backgroundColor: theme.palette.secondary.main,
-            }}
+        {isMobile && (
+          <IconButton
+            onClick={leaveRoomHandler}
+            disabled={isLeaveRoomLoading}
+            color="secondary"
+            sx={{ position: "absolute", left: "1rem" }}
           >
             <ArrowBackIcon />
-          </Avatar>
-        </Button>
-        <Typography variant="h3" sx={{ my: 4, textAlign: "center" }}>
+          </IconButton>
+        )}
+        <Typography variant="h3" sx={{ mt: 4, textAlign: "center" }}>
+          {room.name}
+        </Typography>
+        <Typography variant="h5" sx={{ my: 2, textAlign: "center" }}>
           <span key={participantCount} className="flip-animate">
-            {room.name} With <span data-hover={participantCount}>{participantCount}</span> Players
+            With <span data-hover={participantCount}>{participantCount}</span>
+            {participantCount > 1 ? " Players" : " Player"}
           </span>
         </Typography>
       </Collapse>
