@@ -101,8 +101,10 @@ export const useRoom = (id: string) => {
       });
     };
 
-    window.onpopstate = handler;
-  }, [leaveRoom]);
+    router.events.on("routeChangeStart", handler);
+
+    return () => router.events.off("routeChangeStart", handler);
+  }, [leaveRoom, router.events]);
 
   return {
     room: room as Room,
