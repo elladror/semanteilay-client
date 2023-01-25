@@ -29,12 +29,12 @@ function MyApp(props: MyAppProps) {
         <meta property="description" content="Play Semantle with your so-called friends" />
         <meta property="og:description" content="Play Semantle with your so-called friends" />
         <meta property="og:type" content="website" />
-        <meta property="og:image" content="https://semanteilay.fly.dev/favicon.ico" />
+        <meta property="og:image" content="https://semanteilay.fly.dev/favicon.jpg" />
         <meta property="og:url" content="https://semanteilay.fly.dev/" />
         <meta name="twitter:card" content="summary" />
         <meta name="twitter:description" content="Play Semantle with your so-called friends" />
         <meta property="twitter:title" content="Semanteilay" />
-        <meta property="twitter:image" content="https://semanteilay.fly.dev/favicon.ico" />
+        <meta property="twitter:image" content="https://semanteilay.fly.dev/favicon.jpg" />
         <meta
           name="viewport"
           content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"
